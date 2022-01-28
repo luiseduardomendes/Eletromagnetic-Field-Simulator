@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <cmath>
 #include <allegro5/allegro.h>
@@ -9,10 +11,9 @@
 
 #define NUM_PARTICLES 10
 
-typedef struct 
-{
+typedef struct {
     float x, y, z;
-}Coord;
+} Coord;
 
 #include "campo_eletromagnetico.hpp"
 #include "interface.hpp"

@@ -1,4 +1,32 @@
-#include "campo_eletromagnetico.hpp"
+#include "header.hpp"
+
+EletromagField::EletromagField(){
+    setPosition(0,0,0);
+    setCharge(0);
+    setAceleration(0,0,0);
+    setSpeed(0,0,0);
+    setTimeGap(1/60.0);
+    setPositionedStatus(false);
+}
+
+EletromagField::EletromagField(bool random){
+    setPosition(rand()%1000,rand()%600,0);
+    setCharge(0.001 * ((rand() % 5) - 2.1));
+    std::cout << charge << std::endl;
+    setAceleration(0,0,0);
+    setSpeed(0,0,0);
+    setTimeGap(1/60.0);
+    setPositionedStatus(true);
+}
+
+EletromagField::EletromagField(int posx, int posy, int posz, float spdx, float spdy, float spdz, bool posStatus, float charg){
+    setPosition(posx,posy,posz);
+    setAceleration(0,0,0);
+    setCharge(charg);
+    setSpeed(spdx,spdy,spdz);
+    setTimeGap(1/60.0);
+    setPositionedStatus(posStatus);
+}
 
 void EletromagField::setPosition(float x_, float y_, float z_){
     position.x = x_;
@@ -47,48 +75,18 @@ void EletromagField::setCharge(float charge_){
 void EletromagField::setTimeGap(float time_){
     timeGap = time_;
 }
-float EletromagField::returnCharge(){
-    return charge;
-}
-Coord EletromagField::returnPosition(){
-    return position;
-}
-Coord EletromagField::returnSpeed(){
-    return speed;
-}
-Coord EletromagField::returnAceleration(){
-    return aceleration;
-}
+
 
 void EletromagField::drawParticle(){
     ALLEGRO_COLOR color;
-    if(charge > 0)
+    if(charge < 0)
         color = al_map_rgb(128,128,255);
     else
         color = al_map_rgb(255,128,128);
     al_draw_filled_circle(position.x, position.y, 10, color);
 }
 
-double dist(EletromagField e1, EletromagField e2){
-    Coord p1 = e1.returnPosition();
-    Coord p2 = e2.returnPosition();
 
-    return sqrt(pow(p1.x - p2.x,2) + pow(p1.y - p2.y,2));
-}
-
-Coord setUnityVetor(EletromagField e1, EletromagField e2){
-    Coord p1 = e1.returnPosition();
-    Coord p2 = e2.returnPosition();
-
-    Coord vet;
-    double distance = dist(e1, e2);
-
-    vet.x = (p2.x - p1.x)/distance;
-    vet.y = (p2.y - p1.y)/distance;
-    vet.z = 0;
-
-    return vet;
-}
 
 void drawGrid(int w, int h){
     for (int i = 0; i <= w+100; i += 100)
