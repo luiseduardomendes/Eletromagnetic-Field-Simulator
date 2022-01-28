@@ -18,6 +18,6 @@ typedef struct {
 #include "campo_eletromagnetico.hpp"
 #include "interface.hpp"
 
-double dist(EletromagField e1, EletromagField e2);
-Coord setUnityVetor(EletromagField e1, EletromagField e2);
+double dist(Coord p1, Coord p2);
+Coord setUnityVetor(Coord p1, Coord p2);
 void drawGrid(int w, int h);

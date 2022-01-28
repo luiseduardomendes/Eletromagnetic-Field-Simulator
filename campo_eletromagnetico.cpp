@@ -12,7 +12,6 @@ EletromagField::EletromagField(){
 EletromagField::EletromagField(bool random){
     setPosition(rand()%1000,rand()%600,0);
     setCharge(0.001 * ((rand() % 5) - 2.1));
-    std::cout << charge << std::endl;
     setAceleration(0,0,0);
     setSpeed(0,0,0);
     setTimeGap(1/60.0);
