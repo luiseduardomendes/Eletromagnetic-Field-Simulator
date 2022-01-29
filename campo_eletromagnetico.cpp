@@ -125,7 +125,7 @@ void EletricField::setPosition(int x,int y,int z){
     position.z = z;
 }
 void EletricField::addNewForceVector(Coord vect){
-    position.x += vect.x;
-    position.y += vect.y;
-    position.z += vect.z;
+    vectorField.x += vect.x;
+    vectorField.y += vect.y;
+    vectorField.z += vect.z;
 }

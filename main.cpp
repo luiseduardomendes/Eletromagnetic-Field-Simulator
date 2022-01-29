@@ -12,7 +12,21 @@ int main(){
 
     int height = 600, widht = 1000;
 
-    allegroStart(widht, height, display);
+    if(!al_init())
+        std::cout << "Allegro nao pode ser inicializada" << std::endl;
+
+    
+    if (!(display = al_create_display(widht, height)))
+        std::cout << "Display nao pode ser criado" << std::endl;
+    
+    al_install_keyboard();
+    al_install_mouse();
+    al_init_image_addon();
+    al_init_primitives_addon();
+    al_init_font_addon();
+    al_init_ttf_addon();
+
+    // TODO: create functions to fonts
 
     ALLEGRO_FONT *font24 = al_load_font("fonte.ttf", 24, 0);
 
@@ -43,8 +57,8 @@ int main(){
                     
                     EletricField e;
                     e = setEletricFieldVectorinPoint(p, p[i].position);
-                    Coord v = e.vectorField;
-                    p[i].setAceleration(v.x, v.y, v.z);
+                    
+                    p[i].setAceleration(e.vectorField.x, e.vectorField.y, e.vectorField.z);
 
                     for(int j = 0; j < NUM_PARTICLES; j ++){
                         if (i != j){
