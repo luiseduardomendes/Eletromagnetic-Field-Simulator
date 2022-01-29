@@ -2,9 +2,11 @@
 
 class ElementarCharge{
 public:
-    
-    EletricStatus eletric = EletricStatus();
-    KinectStatus kinect = KinectStatus();
+    ElementarCharge();
+    ElementarCharge(bool random);
+
+    EletricStatus eletric;
+    KinectStatus kinect;
 
     void setAceleration();
     void moveParticle();

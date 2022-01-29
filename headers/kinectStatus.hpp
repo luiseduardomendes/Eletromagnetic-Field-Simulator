@@ -3,6 +3,9 @@
 
 class KinectStatus{
 public:
+    KinectStatus();
+    KinectStatus(bool random);
+
     void setPosition(float, float, float);
     void setSpeed(float, float, float);
     void setAceleration(float, float, float);

@@ -4,11 +4,12 @@
 class EletricStatus{
 public:
     EletricStatus();
+    EletricStatus(bool random);
     
     void setCharge(float);
     
     float charge;
-    
+
     EletricField eletricFieldResultant = EletricField();
     
 };

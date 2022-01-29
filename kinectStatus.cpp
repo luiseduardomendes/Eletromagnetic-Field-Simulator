@@ -1,4 +1,19 @@
-#include "header.hpp"
+#include "headers/header.hpp"
+
+KinectStatus::KinectStatus(){
+    setPosition(0,0,0);
+    setSpeed(0,0,0);
+    setAceleration(0,0,0);
+}
+
+KinectStatus::KinectStatus(bool random){
+    position.x = rand() % 1000;
+    position.y = rand() % 600;
+    position.z = 0;
+
+    setSpeed(0,0,0);
+    setAceleration(0,0,0);
+}
 
 void KinectStatus::setPosition(float x_, float y_, float z_){
     position.x = x_;

@@ -2,8 +2,9 @@
 
 int main(){
     ElementarCharge p[NUM_PARTICLES];
-
     EletricField eletricFieldMousePos;
+
+    Interface interface;
 
     bool particleRemaining, exit = false, reset = false;
 
@@ -47,7 +48,7 @@ int main(){
 
     while(!exit){
         for (int i = 0; i < 10; i ++)
-            p[i] = EletricStatus(false);
+            p[i] = ElementarCharge(true);
         
         reset = false;
         
@@ -57,34 +58,31 @@ int main(){
             
             if(event.type == ALLEGRO_EVENT_TIMER){
                 for(int i = 0; i < NUM_PARTICLES; i ++){
-                    p[i].setAceleration(0, 0, 0);
+                    p[i].kinect.setAceleration(0, 0, 0);
                     
-                    EletricField e;
-                    e = setEletricFieldVectorinPoint(p, p[i].position);
+                    EletricField e(p[i].kinect.position.x, p[i].kinect.position.y, 0);
+                    e = setEletricFieldVectorinPoint(p, p[i].kinect.position);
                     
-                    p[i].setAceleration(e.vectorField.x, e.vectorField.y, e.vectorField.z);
+                    p[i].eletric.eletricFieldResultant.setVectorField(e.vectorField.x, e.vectorField.y, e.vectorField.z);
 
                     for(int j = 0; j < NUM_PARTICLES; j ++){
                         if (i != j){
-                            d = dist(p[i].position, p[j].position);
+                            d = dist(p[i].kinect.position, p[j].kinect.position);
                             if(abs(d) <= 15)
-                                p[i].setSpeed(0,0,0);
+                                p[i].kinect.setSpeed(0,0,0);
                         }
                     }
                         
-                    p[i].updateSpeed();
+                    p[i].kinect.updateSpeed();
                     p[i].moveParticle();
-                    
-                    if (p[i].position.x > widht || p[i].position.x < 0 || p[i].position.y > height || p[i].position.y < 0)
-                        p[i].setPositionedStatus(true);
                     
                 }
                 
                 al_clear_to_color(al_map_rgb(5,10,25));
-                drawGrid(widht,height);
+                interface.drawGrid();
                 for(int i = 0; i < NUM_PARTICLES; i ++)
                     if (p[i].isPositioned())
-                        p[i].drawParticle();
+                        interface.drawParticle(p[i]);
                 
                 al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x, eletricFieldMousePos.position.y, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
                 al_flip_display();
