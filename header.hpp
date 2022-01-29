@@ -21,3 +21,5 @@ typedef struct {
 double dist(Coord p1, Coord p2);
 Coord setUnityVetor(Coord p1, Coord p2);
 void drawGrid(int w, int h);
+EletricField setEletricFieldVectorinPoint(MoleculeStatus *m, Coord p);
+void allegroStart(int w, int h, ALLEGRO_DISPLAY *display);

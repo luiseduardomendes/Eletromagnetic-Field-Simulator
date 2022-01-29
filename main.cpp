@@ -1,8 +1,8 @@
 #include "header.hpp"
 
 int main(){
-    EletromagField p[NUM_PARTICLES];
-    EletromagField mousePos = EletromagField();
+    MoleculeStatus p[NUM_PARTICLES];
+    EletricField eletricFieldMousePos;
     bool particleRemaining, exit = false;
     double v, d;
     Coord vet;
@@ -39,35 +39,36 @@ int main(){
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
     while(1){
-        for (int i = 0; i < 10; i ++){
-            p[i] = EletromagField(false);
-        }
-
+        for (int i = 0; i < 10; i ++)
+            p[i] = MoleculeStatus(false);
+        
         exit = false;
         
         do{
             ALLEGRO_EVENT event;
             al_wait_for_event(eventQueue, &event);
             
-            
             if(event.type == ALLEGRO_EVENT_TIMER){
                 for(int i = 0; i < NUM_PARTICLES; i ++){
                     p[i].setAceleration(0, 0, 0);
-                    for (int j = 0; j < NUM_PARTICLES; j ++){
-                        if(j != i && p[j].isPositioned() && p[i].isPositioned()){
-                            d = dist(p[j].position, p[i].position);
-                            v = (1/(4*M_PI*8.85*pow(10,-12))) * (p[i].charge * p[j].charge / pow(d, 2));
-                            vet = setUnityVetor(p[j].position,p[i].position);
-                            if(abs(d) >= 15)
-                                p[i].increaseAceleration(vet.x * v, vet.y * v, vet.z * v * 0);
-                            else 
+                    
+                    EletricField e;
+                    e = setEletricFieldVectorinPoint(p, p[i].position);
+                    Coord v = e.vectorField;
+                    p[i].setAceleration(v.x, v.y, v.z);
+
+                    for(int j = 0; j < NUM_PARTICLES; j ++){
+                        if (i != j){
+                            dist(p[i].position, p[j].position);
+                            if(abs(d) <= 15)
                                 p[i].setSpeed(0,0,0);
                         }
                     }
+                        
                     p[i].updateSpeed();
                     p[i].moveParticle();
-                    Coord pos = p[i].position;
-                    if (pos.x > widht-10 || pos.x < 10 || pos.y > height-10 || pos.y < 10)
+                    
+                    if (p[i].position.x > widht || p[i].position.x < 0 || p[i].position.y > height || p[i].position.y < 0)
                         p[i].setPositionedStatus(true);
                     
                 }
@@ -77,7 +78,8 @@ int main(){
                 for(int i = 0; i < NUM_PARTICLES; i ++)
                     if (p[i].isPositioned())
                         p[i].drawParticle();
-                al_draw_textf(font24, al_map_rgb(255,255,255), mousePos.position.x, mousePos.position.y, 0, "E = (%.3f, %.3f, %.3f) N/C", mousePos.aceleration.x, -mousePos.aceleration.y, mousePos.aceleration.z);
+                
+                al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x, eletricFieldMousePos.position.y, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
                 al_flip_display();
             }
 
@@ -88,34 +90,26 @@ int main(){
             }
             
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                mousePos = EletromagField();
-                mousePos.position.x = event.mouse.x;
-                mousePos.position.y = event.mouse.y;
-                mousePos.position.z = 0;
-                for (int j = 0; j < NUM_PARTICLES; j ++){
-                    if(p[j].isPositioned()){
-                        d = dist(p[j].position, mousePos.position);
-                        v = (1/(4*M_PI*8.85*pow(10,-12))) * (p[j].charge / pow(d, 2));
-                        vet = setUnityVetor(p[j].position,mousePos.position);
-                        mousePos.increaseAceleration(vet.x * v, vet.y * v, vet.z * v * 0);
-                    }
-                }
-
+                EletricField eletricFieldMousePos = EletricField(event.mouse.x, event.mouse.y, 0);
+                eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
             }
+
+            /* TODO: create an object ElementarCharge and MoleculeStatus
+             * each of these will have some parameters as mass, charge, position, etc.
+            */
+
+           /*
+            * TODO: create an object EletricMeter and DistanceMeter. Each of these will 
+            * have members to do their role
+            */
             
-
-
-
             particleRemaining = false;
 
             for (int i = 0; i < NUM_PARTICLES; i ++)
                 if (p[i].isPositioned())
                     particleRemaining = true;
             
-
         } while(particleRemaining && !exit);
-
     }
-
     return 0;
 }

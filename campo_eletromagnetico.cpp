@@ -1,6 +1,6 @@
 #include "header.hpp"
 
-EletromagField::EletromagField(){
+MoleculeStatus::MoleculeStatus(){
     setPosition(0,0,0);
     setCharge(0);
     setAceleration(0,0,0);
@@ -9,7 +9,7 @@ EletromagField::EletromagField(){
     setPositionedStatus(false);
 }
 
-EletromagField::EletromagField(bool random){
+MoleculeStatus::MoleculeStatus(bool random){
     setPosition(rand()%1000,rand()%600,0);
     setCharge(0.001 * ((rand() % 5) - 2.1));
     setAceleration(0,0,0);
@@ -18,7 +18,7 @@ EletromagField::EletromagField(bool random){
     setPositionedStatus(true);
 }
 
-EletromagField::EletromagField(int posx, int posy, int posz, float spdx, float spdy, float spdz, bool posStatus, float charg){
+MoleculeStatus::MoleculeStatus(int posx, int posy, int posz, float spdx, float spdy, float spdz, bool posStatus, float charg){
     setPosition(posx,posy,posz);
     setAceleration(0,0,0);
     setCharge(charg);
@@ -27,56 +27,56 @@ EletromagField::EletromagField(int posx, int posy, int posz, float spdx, float s
     setPositionedStatus(posStatus);
 }
 
-void EletromagField::setPosition(float x_, float y_, float z_){
+void MoleculeStatus::setPosition(float x_, float y_, float z_){
     position.x = x_;
     position.y = y_;
     position.z = z_;
 }
-void EletromagField::setSpeed(float x_, float y_, float z_){
+void MoleculeStatus::setSpeed(float x_, float y_, float z_){
     speed.x = x_;
     speed.y = y_;
     speed.z = z_;
 }
-void EletromagField::increaseSpeed(float x_, float y_, float z_){
+void MoleculeStatus::increaseSpeed(float x_, float y_, float z_){
     speed.x += x_;
     speed.y += y_;
     speed.z += z_;
 }
-void EletromagField::increaseAceleration(float x_, float y_, float z_){
+void MoleculeStatus::increaseAceleration(float x_, float y_, float z_){
     aceleration.x += x_;
     aceleration.y += y_;
     aceleration.z += z_;
 }
-void EletromagField::setAceleration(float x_, float y_, float z_){
+void MoleculeStatus::setAceleration(float x_, float y_, float z_){
     aceleration.x = x_;
     aceleration.y = y_;
     aceleration.z = z_;
 }
-void EletromagField::moveParticle(){
+void MoleculeStatus::moveParticle(){
     position.x += speed.x;
     position.y += speed.y;
     position.z += speed.z;
 }
-void EletromagField::updateSpeed(){
+void MoleculeStatus::updateSpeed(){
     speed.x += aceleration.x * timeGap;
     speed.y += aceleration.y * timeGap;
     speed.z += aceleration.z * timeGap;
 }
-void EletromagField::setPositionedStatus(bool status){
+void MoleculeStatus::setPositionedStatus(bool status){
     positioned = status;
 }
-bool EletromagField::isPositioned(){
+bool MoleculeStatus::isPositioned(){
     return positioned;
 }
-void EletromagField::setCharge(float charge_){
+void MoleculeStatus::setCharge(float charge_){
     charge = charge_;
 }
-void EletromagField::setTimeGap(float time_){
+void MoleculeStatus::setTimeGap(float time_){
     timeGap = time_;
 }
 
 
-void EletromagField::drawParticle(){
+void MoleculeStatus::drawParticle(){
     ALLEGRO_COLOR color;
     if(charge < 0)
         color = al_map_rgb(128,128,255);
@@ -104,4 +104,28 @@ void drawGrid(int w, int h){
         al_draw_line(0, i, w, i, al_map_rgba_f(0.05,0.05,0.05,0.05), 1);
 
     
+}
+
+EletricField::EletricField(){
+    setVectorField(0,0,0);
+    setPosition(0,0,0);
+}
+EletricField::EletricField(int x,int y,int z){
+    setVectorField(0,0,0);
+    setPosition(x,y,z);
+}
+void EletricField::setVectorField(double x, double y, double z){
+    vectorField.x = x;
+    vectorField.y = y;
+    vectorField.z = z;
+}
+void EletricField::setPosition(int x,int y,int z){
+    position.x = x;
+    position.y = y;
+    position.z = z;
+}
+void EletricField::addNewForceVector(Coord vect){
+    position.x += vect.x;
+    position.y += vect.y;
+    position.z += vect.z;
 }

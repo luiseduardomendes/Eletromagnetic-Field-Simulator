@@ -1,11 +1,11 @@
 #pragma once
 #include "header.hpp"
 
-class EletromagField{
+class MoleculeStatus{
 public:
-    EletromagField();
-    EletromagField(bool random);
-    EletromagField(int posx, int posy, int posz, float spdx, float spdy, float spdz, bool posStatus, float charg);
+    MoleculeStatus();
+    MoleculeStatus(bool random);
+    MoleculeStatus(int posx, int posy, int posz, float spdx, float spdy, float spdz, bool posStatus, float charg);
     
     void setPosition(float, float, float);
     void setSpeed(float, float, float);
@@ -32,6 +32,18 @@ public:
 private:
     float timeGap;
     bool positioned;
+};
+
+class EletricField{
+public:
+    EletricField();
+    EletricField(int x,int y,int z);
+    void addNewForceVector(Coord vect);
+    void setVectorField(double x, double y, double z);
+    void setPosition(int x,int y,int z);
+    Coord vectorField;
+    Coord position;
+private:    
 };
 
 
