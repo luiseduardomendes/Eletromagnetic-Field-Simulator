@@ -1,4 +1,4 @@
-#include "header.hpp"
+#include "headers/header.hpp"
 
 double dist(Coord p1, Coord p2){
     return sqrt(pow(p1.x - p2.x,2) + pow(p1.y - p2.y,2));
@@ -15,14 +15,15 @@ Coord setUnityVetor(Coord p1, Coord p2){
     return vet;
 }
 
-EletricField setEletricFieldVectorinPoint(MoleculeStatus *m, Coord p){
-    EletricField e;
+EletricField setEletricFieldVectorinPoint(EletricStatus *m, Coord p){
+    EletricField e = EletricField(p.x, p.y, p.z);
+
     for (int i = 0; i < NUM_PARTICLES; i ++)
         e.addNewForceVector(calcEletricField(m[i], p));
     return e;
 }
 
-Coord calcEletricField(MoleculeStatus m, Coord p){
+Coord calcEletricField(EletricStatus m, Coord p){
     double d = dist(m.position, p);
     double e = 8.85418782 * pow(10,-12);
     double k = 1/(4 * M_PI * e);
@@ -38,3 +39,8 @@ Coord calcEletricField(MoleculeStatus m, Coord p){
     }
     return vet;
 }
+
+double dist(Coord p1, Coord p2);
+Coord setUnityVetor(Coord p1, Coord p2);
+EletricField setEletricFieldVectorinPoint(EletricStatus *m, Coord p);
+Coord calcEletricField(EletricStatus m, Coord p);

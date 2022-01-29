@@ -1,11 +1,15 @@
-#include "header.hpp"
+#include "headers/header.hpp"
 
 int main(){
-    MoleculeStatus p[NUM_PARTICLES];
+    ElementarCharge p[NUM_PARTICLES];
+
     EletricField eletricFieldMousePos;
-    bool particleRemaining, exit = false;
+
+    bool particleRemaining, exit = false, reset = false;
+
     double v, d;
     Coord vet;
+    
     float framerate = 60;
 
     ALLEGRO_DISPLAY *display = NULL;
@@ -28,7 +32,7 @@ int main(){
 
     // TODO: create functions to fonts
 
-    ALLEGRO_FONT *font24 = al_load_font("fonte.ttf", 24, 0);
+    ALLEGRO_FONT *font24 = al_load_font("fonts/fonte.ttf", 24, 0);
 
     ALLEGRO_TIMER* frames = al_create_timer(1/60.0);
     al_start_timer(frames);
@@ -41,13 +45,13 @@ int main(){
     al_register_event_source(eventQueue, al_get_mouse_event_source());
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
-    while(1){
+    while(!exit){
         for (int i = 0; i < 10; i ++)
-            p[i] = MoleculeStatus(false);
+            p[i] = EletricStatus(false);
         
-        exit = false;
+        reset = false;
         
-        do{
+        while(!reset){
             ALLEGRO_EVENT event;
             al_wait_for_event(eventQueue, &event);
             
@@ -62,7 +66,7 @@ int main(){
 
                     for(int j = 0; j < NUM_PARTICLES; j ++){
                         if (i != j){
-                            dist(p[i].position, p[j].position);
+                            d = dist(p[i].position, p[j].position);
                             if(abs(d) <= 15)
                                 p[i].setSpeed(0,0,0);
                         }
@@ -88,8 +92,15 @@ int main(){
 
             else if(event.type == ALLEGRO_EVENT_KEY_DOWN){
                 /*TODO: implement keyboard functions*/
-                if (event.keyboard.keycode == ALLEGRO_KEY_ENTER)
+                switch (event.keyboard.keycode){
+                case ALLEGRO_KEY_ENTER:
+                    reset = true;
+                    break;
+                case ALLEGRO_KEY_ESCAPE:
                     exit = true;
+                    reset = true;
+                    break;
+                }
             }
             
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
@@ -97,7 +108,7 @@ int main(){
                 eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
             }
 
-            /* TODO: create an object ElementarCharge and MoleculeStatus
+            /* TODO: create an object ElementarCharge and EletricStatus
              * each of these will have some parameters as mass, charge, position, etc.
             */
 
@@ -110,9 +121,9 @@ int main(){
 
             for (int i = 0; i < NUM_PARTICLES; i ++)
                 if (p[i].isPositioned())
-                    particleRemaining = true;
+                    reset = true;
             
-        } while(particleRemaining && !exit);
+        }
     }
     return 0;
 }

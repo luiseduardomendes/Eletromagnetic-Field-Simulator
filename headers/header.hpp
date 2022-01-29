@@ -15,12 +15,17 @@ typedef struct {
     float x, y, z;
 } Coord;
 
-#include "campo_eletromagnetico.hpp"
+#include "calculus.hpp"
+
+#include "EletricStatus.hpp"
+#include "EletricField.hpp"
+#include "kinectStatus.hpp"
 #include "interface.hpp"
+#include "ElementarCharge.hpp"
 
 double dist(Coord p1, Coord p2);
 Coord setUnityVetor(Coord p1, Coord p2);
 void drawGrid(int w, int h);
-EletricField setEletricFieldVectorinPoint(MoleculeStatus *m, Coord p);
+EletricField setEletricFieldVectorinPoint(EletricStatus *m, Coord p);
 void allegroStart(int w, int h, ALLEGRO_DISPLAY *display);
-Coord calcEletricField(MoleculeStatus m, Coord p);
+Coord calcEletricField(EletricStatus m, Coord p);
