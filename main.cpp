@@ -6,7 +6,7 @@ int main(){
 
     Interface interface;
 
-    bool particleRemaining, exit = false, reset = false;
+    bool particleRemaining, exit = false, reset = false, pause = false;
 
     double v, d;
     Coord vet;
@@ -40,6 +40,8 @@ int main(){
 
     ALLEGRO_EVENT_QUEUE *eventQueue = NULL;
 
+    interface.initInterface(widht, height);
+
     eventQueue = al_create_event_queue();
     al_register_event_source(eventQueue, al_get_timer_event_source(frames));
     al_register_event_source(eventQueue, al_get_keyboard_event_source());
@@ -47,7 +49,7 @@ int main(){
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
     while(!exit){
-        for (int i = 0; i < 10; i ++)
+        for (int i = 0; i < NUM_PARTICLES; i ++)
             p[i] = ElementarCharge(true);
         
         reset = false;
@@ -57,25 +59,32 @@ int main(){
             al_wait_for_event(eventQueue, &event);
             
             if(event.type == ALLEGRO_EVENT_TIMER){
-                for(int i = 0; i < NUM_PARTICLES; i ++){
-                    p[i].kinect.setAceleration(0, 0, 0);
-                    
-                    EletricField e(p[i].kinect.position.x, p[i].kinect.position.y, 0);
-                    e = setEletricFieldVectorinPoint(p, p[i].kinect.position);
-                    
-                    p[i].eletric.eletricFieldResultant.setVectorField(e.vectorField.x, e.vectorField.y, e.vectorField.z);
-
-                    for(int j = 0; j < NUM_PARTICLES; j ++){
-                        if (i != j){
-                            d = dist(p[i].kinect.position, p[j].kinect.position);
-                            if(abs(d) <= 15)
-                                p[i].kinect.setSpeed(0,0,0);
-                        }
-                    }
+                if (!pause){
+                    for(int i = 0; i < NUM_PARTICLES; i ++){
+                        p[i].kinect.setAceleration(0, 0, 0);
                         
-                    p[i].kinect.updateSpeed();
-                    p[i].moveParticle();
-                    
+                        EletricField e(p[i].kinect.position.x, p[i].kinect.position.y, 0);
+                        e = setEletricFieldVectorinPoint(p, p[i].kinect.position);
+                        e.vectorField.x *= p[i].eletric.charge;
+                        e.vectorField.y *= p[i].eletric.charge;  
+
+                        //std::cout << e.vectorField.x << ", " << e.vectorField.y << std::endl;
+                        
+                        p[i].eletric.eletricFieldResultant.setVectorField(e.vectorField.x, e.vectorField.y, e.vectorField.z);
+                        p[i].setAceleration();
+
+                        for(int j = 0; j < NUM_PARTICLES; j ++){
+                            if (i != j){
+                                d = dist(p[i].kinect.position, p[j].kinect.position);
+                                if(abs(d) <= 15)
+                                    p[i].kinect.setSpeed(0,0,0);
+                            }
+                        }
+                            
+                        p[i].kinect.updateSpeed();
+                        p[i].moveParticle();
+                        
+                    }
                 }
                 
                 al_clear_to_color(al_map_rgb(5,10,25));
@@ -98,11 +107,16 @@ int main(){
                     exit = true;
                     reset = true;
                     break;
+                case ALLEGRO_KEY_P:
+                    if (!pause) 
+                        pause = true; 
+                    else 
+                        pause = false;
                 }
             }
             
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                EletricField eletricFieldMousePos = EletricField(event.mouse.x, event.mouse.y, 0);
+                eletricFieldMousePos = EletricField(event.mouse.x, event.mouse.y, 0);
                 eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
             }
 
@@ -119,8 +133,10 @@ int main(){
 
             for (int i = 0; i < NUM_PARTICLES; i ++)
                 if (p[i].isPositioned())
-                    reset = true;
+                    particleRemaining = true;
             
+            if (!particleRemaining)
+                reset = true;
         }
     }
     return 0;

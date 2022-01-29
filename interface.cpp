@@ -7,8 +7,8 @@ void Interface::drawInterface(){
 }
 void Interface::initInterface(int w, int h){
     interface = al_create_bitmap(w/2, h/8);
-    width = w/2;
-    height = h/2;
+    width = w;
+    height = h;
 }
 
 void Interface::drawParticle(ElementarCharge e){

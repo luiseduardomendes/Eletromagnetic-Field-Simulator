@@ -27,3 +27,4 @@ bool ElementarCharge::isPositioned(){
 void ElementarCharge::setPositioned(bool status){
     positioned = status;
 }
+

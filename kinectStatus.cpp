@@ -4,6 +4,7 @@ KinectStatus::KinectStatus(){
     setPosition(0,0,0);
     setSpeed(0,0,0);
     setAceleration(0,0,0);
+    timeGap = 1/60.0;
 }
 
 KinectStatus::KinectStatus(bool random){
@@ -13,6 +14,8 @@ KinectStatus::KinectStatus(bool random){
 
     setSpeed(0,0,0);
     setAceleration(0,0,0);
+
+    timeGap = 1/60.0;
 }
 
 void KinectStatus::setPosition(float x_, float y_, float z_){

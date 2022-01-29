@@ -19,7 +19,11 @@ EletricField setEletricFieldVectorinPoint(ElementarCharge *m, Coord p){
     EletricField e = EletricField(p.x, p.y, p.z);
 
     for (int i = 0; i < NUM_PARTICLES; i ++)
-        e.addNewForceVector(calcEletricField(m[i], p));
+        if (m[i].isPositioned())
+            e.addNewForceVector(calcEletricField(m[i], p));
+            
+    
+        
     return e;
 }
 
@@ -28,10 +32,12 @@ Coord calcEletricField(ElementarCharge m, Coord p){
     double e = 8.85418782 * pow(10,-12);
     double k = 1/(4 * M_PI * e);
     double v = k * (m.eletric.charge / pow(d, 2));
+    
     Coord vet = setUnityVetor(m.kinect.position,p);
     vet.x *= v;
     vet.y *= v;
     vet.z *= v;
+
     if (abs(d) < 15){
         vet.x = 0;
         vet.y = 0;
