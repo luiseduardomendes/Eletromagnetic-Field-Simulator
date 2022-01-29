@@ -7,24 +7,13 @@ int main(){
     double v, d;
     Coord vet;
     float framerate = 60;
-    
-    int height=600, widht=1000;
-    
-    if(!al_init())
-        std::cout << "Allegro nao pode ser inicializada" << std::endl;
 
     ALLEGRO_DISPLAY *display = NULL;
-    if (!(display = al_create_display(widht, height)))
-        std::cout << "Display nao pode ser criado" << std::endl;
-    
-    al_install_keyboard();
-    al_install_mouse();
-    al_init_image_addon();
-    al_init_primitives_addon();
-    al_init_font_addon();
-    al_init_ttf_addon();
 
-    // TODO: create functions to fonts
+    int height = 600, widht = 1000;
+
+    allegroStart(widht, height, display);
+
     ALLEGRO_FONT *font24 = al_load_font("fonte.ttf", 24, 0);
 
     ALLEGRO_TIMER* frames = al_create_timer(1/60.0);
