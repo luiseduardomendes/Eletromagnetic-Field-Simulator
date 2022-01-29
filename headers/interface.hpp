@@ -8,7 +8,7 @@ public:
     void loadBitmaps();
 
     void drawParticle(ElementarCharge e);
-    void drawInterface();
+    void drawInterface(Coord mouse);
     void drawGrid();
 
 private:

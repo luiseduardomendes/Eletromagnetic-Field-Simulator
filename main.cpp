@@ -5,6 +5,7 @@ int main(){
     EletricField eletricFieldMousePos;
 
     Interface interface;
+    Coord mouse;
 
     bool particleRemaining, exit = false, reset = false, pause = false;
 
@@ -95,6 +96,8 @@ int main(){
                 
                 al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
                 al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 - eletricFieldMousePos.vectorField.y/1000), al_map_rgb(255,255,255),3);
+                al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgb(128,128,128));
+                interface.drawInterface(mouse);
                 
                 al_flip_display();
             }
@@ -116,7 +119,10 @@ int main(){
                         pause = false;
                 }
             }
-            
+            else if(event.type == ALLEGRO_EVENT_MOUSE_AXES){
+                mouse.x = event.mouse.x;
+                mouse.y = event.mouse.y;
+            }
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
                 eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
                 eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);

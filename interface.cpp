@@ -1,24 +1,45 @@
 #include "headers/header.hpp"
 
-void Interface::drawInterface(){
-    al_set_target_bitmap(interface);
-    al_draw_bitmap(posCharge, 0, 0, 0);
+void Interface::drawInterface(Coord mouse){
+    int sizePos = 0, sizeNeg = 0, sizeMet = 0;
+
+
+    if (mouse.x > (width/2)-128 && mouse.x < (width/2)-64 && mouse.y > (height)-128 && mouse.y < (height)-64){
+        sizePos = 32;
+        
+    }
+    else if (mouse.x > (width/2)-32 && mouse.x < (width/2)+32 && mouse.y > (height)-128 && mouse.y < (height)-64){
+        sizeNeg = 32;
+        
+    }
+    else if (mouse.x > (width/2)+64 && mouse.x < (width/2)+128 && mouse.y > (height)-128 && mouse.y < (height)-64){
+        sizeMet = 32;
+        
+    }
+    al_draw_scaled_bitmap(posCharge, 0, 0, 64, 64, (width/2)-96 - (sizePos/2), height - 96 - (sizePos/2), 64+sizePos, 64+sizePos, ALLEGRO_ALIGN_CENTER);
+    al_draw_scaled_bitmap(negCharge, 0, 0, 64, 64, (width/2) - (sizeNeg/2), height - 96 - (sizeNeg/2), 64+sizeNeg, 64+sizeNeg, ALLEGRO_ALIGN_CENTER);
+    al_draw_scaled_bitmap(eletromagMeter, 0, 0, 64, 64, (width/2)+96 - (sizeMet/2), height - 96 - (sizeMet/2), 64+sizeMet, 64+sizeMet, ALLEGRO_ALIGN_CENTER);
+
+    
     
 }
 void Interface::initInterface(int w, int h){
-    interface = al_create_bitmap(w/2, h/8);
+    interface = al_create_bitmap(96*3, 96);
     width = w;
     height = h;
+    posCharge = al_load_bitmap("assets/proton.png");
+    negCharge = al_load_bitmap("assets/eletron.png");
+    eletromagMeter = al_load_bitmap("assets/target.png");
 }
 
 void Interface::drawParticle(ElementarCharge e){
     ALLEGRO_COLOR color;
     
     if(e.eletric.charge < 0)
-        color = al_map_rgb(128,128,255);
+        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x * 1000), (e.kinect.position.y * 1000), 20, 20, 0);
     else
-        color = al_map_rgb(255,128,128);
-    al_draw_filled_circle((e.kinect.position.x * 1000), (e.kinect.position.y * 1000), 10, color);
+        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x * 1000), (e.kinect.position.y * 1000), 20, 20, 0);
+    
 }
 
 void Interface::drawGrid(){
