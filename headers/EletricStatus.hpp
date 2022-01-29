@@ -6,9 +6,9 @@ public:
     EletricStatus();
     EletricStatus(bool random);
     
-    void setCharge(float);
+    void setCharge(double);
     
-    float charge;
+    double charge;
 
     EletricField eletricFieldResultant = EletricField();
     

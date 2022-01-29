@@ -8,8 +8,8 @@ KinectStatus::KinectStatus(){
 }
 
 KinectStatus::KinectStatus(bool random){
-    position.x = rand() % 1000;
-    position.y = rand() % 600;
+    position.x = (rand() % 1000) / 1000.0;
+    position.y = (rand() % 600) / 1000.0;
     position.z = 0;
 
     setSpeed(0,0,0);
@@ -18,27 +18,27 @@ KinectStatus::KinectStatus(bool random){
     timeGap = 1/60.0;
 }
 
-void KinectStatus::setPosition(float x_, float y_, float z_){
+void KinectStatus::setPosition(double x_, double y_, double z_){
     position.x = x_;
     position.y = y_;
     position.z = z_;
 }
-void KinectStatus::setSpeed(float x_, float y_, float z_){
+void KinectStatus::setSpeed(double x_, double y_, double z_){
     speed.x = x_;
     speed.y = y_;
     speed.z = z_;
 }
-void KinectStatus::increaseSpeed(float x_, float y_, float z_){
+void KinectStatus::increaseSpeed(double x_, double y_, double z_){
     speed.x += x_;
     speed.y += y_;
     speed.z += z_;
 }
-void KinectStatus::increaseAceleration(float x_, float y_, float z_){
+void KinectStatus::increaseAceleration(double x_, double y_, double z_){
     aceleration.x += x_;
     aceleration.y += y_;
     aceleration.z += z_;
 }
-void KinectStatus::setAceleration(float x_, float y_, float z_){
+void KinectStatus::setAceleration(double x_, double y_, double z_){
     aceleration.x = x_;
     aceleration.y = y_;
     aceleration.z = z_;

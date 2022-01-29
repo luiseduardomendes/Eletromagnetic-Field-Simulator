@@ -13,11 +13,12 @@ void Interface::initInterface(int w, int h){
 
 void Interface::drawParticle(ElementarCharge e){
     ALLEGRO_COLOR color;
+    
     if(e.eletric.charge < 0)
         color = al_map_rgb(128,128,255);
     else
         color = al_map_rgb(255,128,128);
-    al_draw_filled_circle(e.kinect.position.x, e.kinect.position.y, 10, color);
+    al_draw_filled_circle((e.kinect.position.x * 1000), (e.kinect.position.y * 1000), 10, color);
 }
 
 void Interface::drawGrid(){

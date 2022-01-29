@@ -3,11 +3,13 @@
 ElementarCharge::ElementarCharge(){
     kinect = KinectStatus();
     eletric = EletricStatus();
+    positioned = true;
 }
 
 ElementarCharge::ElementarCharge(bool random){
     kinect = KinectStatus(true);
     eletric = EletricStatus(true);
+    positioned = true;
 }
 
 void ElementarCharge::moveParticle(){

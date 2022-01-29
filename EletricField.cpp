@@ -4,7 +4,7 @@ EletricField::EletricField(){
     setVectorField(0,0,0);
     setPosition(0,0,0);
 }
-EletricField::EletricField(int x,int y,int z){
+EletricField::EletricField(double x,double y,double z){
     setVectorField(0,0,0);
     setPosition(x,y,z);
 }
@@ -13,7 +13,7 @@ void EletricField::setVectorField(double x, double y, double z){
     vectorField.y = y;
     vectorField.z = z;
 }
-void EletricField::setPosition(int x,int y,int z){
+void EletricField::setPosition(double x,double y,double z){
     position.x = x;
     position.y = y;
     position.z = z;

@@ -11,7 +11,7 @@ int main(){
     double v, d;
     Coord vet;
     
-    float framerate = 60;
+    double framerate = 60;
 
     ALLEGRO_DISPLAY *display = NULL;
 
@@ -76,7 +76,7 @@ int main(){
                         for(int j = 0; j < NUM_PARTICLES; j ++){
                             if (i != j){
                                 d = dist(p[i].kinect.position, p[j].kinect.position);
-                                if(abs(d) <= 15)
+                                if(abs(d) <= 0.015)
                                     p[i].kinect.setSpeed(0,0,0);
                             }
                         }
@@ -93,7 +93,9 @@ int main(){
                     if (p[i].isPositioned())
                         interface.drawParticle(p[i]);
                 
-                al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x, eletricFieldMousePos.position.y, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
+                al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
+                al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 - eletricFieldMousePos.vectorField.y/1000), al_map_rgb(255,255,255),3);
+                
                 al_flip_display();
             }
 
@@ -116,7 +118,7 @@ int main(){
             }
             
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                eletricFieldMousePos = EletricField(event.mouse.x, event.mouse.y, 0);
+                eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
                 eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
             }
 

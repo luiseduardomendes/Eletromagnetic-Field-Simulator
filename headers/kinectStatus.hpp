@@ -6,12 +6,12 @@ public:
     KinectStatus();
     KinectStatus(bool random);
 
-    void setPosition(float, float, float);
-    void setSpeed(float, float, float);
-    void setAceleration(float, float, float);
+    void setPosition(double, double, double);
+    void setSpeed(double, double, double);
+    void setAceleration(double, double, double);
 
-    void increaseSpeed(float, float, float);
-    void increaseAceleration(float, float, float);
+    void increaseSpeed(double, double, double);
+    void increaseAceleration(double, double, double);
     void updateSpeed();
 
     Coord position;

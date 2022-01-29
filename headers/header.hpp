@@ -12,7 +12,7 @@
 #define NUM_PARTICLES 10
 
 typedef struct {
-    float x, y, z;
+    double x, y, z;
 } Coord;
 
 

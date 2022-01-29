@@ -38,7 +38,7 @@ Coord calcEletricField(ElementarCharge m, Coord p){
     vet.y *= v;
     vet.z *= v;
 
-    if (abs(d) < 15){
+    if (abs(d) < 0.015){
         vet.x = 0;
         vet.y = 0;
         vet.z = 0;
