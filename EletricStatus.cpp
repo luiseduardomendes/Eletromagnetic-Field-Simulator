@@ -5,7 +5,7 @@ EletricStatus::EletricStatus(){
     eletricFieldResultant = EletricField();
 }
 EletricStatus::EletricStatus(bool random){
-    if (rand() % 10 >= 6)
+    if (rand() % 10 >= 5)
         setCharge(25 * pow(10, -9));
     else
         setCharge(-25 * pow(10, -9));

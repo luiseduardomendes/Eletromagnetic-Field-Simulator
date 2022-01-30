@@ -8,8 +8,6 @@ int main(){
     for(int i = 0; i < 10; i ++)
         p.push_back(ElementarCharge());
 
-    int numCharges = 10;
-
     Interface interface;
     Coord mouse;
 
@@ -20,6 +18,10 @@ int main(){
 
     double v, d;
     Coord vet;
+    Coord vetorCampo;
+    Coord vetorPosicao;
+    Coord ortVetUnit;
+    Coord vetorUnitario;
     
     double framerate = 60;
 
@@ -58,12 +60,10 @@ int main(){
     al_register_event_source(eventQueue, al_get_mouse_event_source());
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
+    
+
     while(!exit){
-
-        for (int i = 0; i < numCharges; i ++)
-            p[i] = ElementarCharge(true);
-        //p[0] = ElementarCharge(true);
-
+        p.clear();
 
         reset = false;
         
@@ -73,11 +73,11 @@ int main(){
             
             if(event.type == ALLEGRO_EVENT_TIMER){
                 if (!pause){
-                    for(int i = 0; i < numCharges; i ++){
+                    for(int i = 0; i < p.size(); i ++){
                         p[i].kinect.setAceleration(0, 0, 0);
                         
                         EletricField e(p[i].kinect.position.x, p[i].kinect.position.y, 0);
-                        e = setEletricFieldVectorinPoint(molecules, numCharges, p[i].kinect.position);
+                        e = setEletricFieldVectorinPoint(molecules, p.size(), p[i].kinect.position);
                         e.vectorField.x *= p[i].eletric.charge;
                         e.vectorField.y *= p[i].eletric.charge;  
 
@@ -86,7 +86,7 @@ int main(){
                         p[i].eletric.eletricFieldResultant.setVectorField(e.vectorField.x, e.vectorField.y, e.vectorField.z);
                         p[i].setAceleration();
 
-                        for(int j = 0; j < numCharges; j ++){
+                        for(int j = 0; j < p.size(); j ++){
                             if (i != j){
                                 d = dist(p[i].kinect.position, p[j].kinect.position);
                                 if(abs(d) <= 0.015)
@@ -100,14 +100,40 @@ int main(){
                     }
                 }
                 
+                // TODO: remake functions to drawing and optimize;
+
                 al_clear_to_color(al_map_rgb(5,10,25));
                 interface.drawGrid();
-                for(int i = 0; i < numCharges; i ++)
+                for(int i = 0; i < p.size(); i ++)
                     if (p[i].isPositioned())
                         interface.drawParticle(p[i]);
                 if(eletroMeterActived)
                     al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
-                al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(255,255,255),3);
+                al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(140,156,172),2);
+
+                vetorCampo.x = eletricFieldMousePos.vectorField.x;
+                vetorCampo.y = eletricFieldMousePos.vectorField.y;
+                vetorCampo.z = eletricFieldMousePos.vectorField.z;
+                
+                vetorPosicao.x = eletricFieldMousePos.position.x;
+                vetorPosicao.y = eletricFieldMousePos.position.y;
+                vetorPosicao.z = eletricFieldMousePos.position.z;
+
+                vetorUnitario = setUnityVetor(vetorPosicao, vetorCampo);
+                ortVetUnit = ortogonalVector(vetorUnitario);
+
+                cout << "unitario: " << vetorUnitario.x << ", " << vetorUnitario.y << endl;
+                cout << "ortogonal: "<< ortVetUnit.x << ", " << ortVetUnit.y << endl;
+
+                al_draw_filled_triangle(
+                    vetorCampo.x/1000 + vetorPosicao.x*1000 + (vetorUnitario.x * 9), 
+                    vetorCampo.y/1000 + vetorPosicao.y*1000 + (vetorUnitario.y * 9), 
+                    vetorCampo.x/1000 + vetorPosicao.x*1000 - (ortVetUnit.x * 3), 
+                    vetorCampo.y/1000 + vetorPosicao.y*1000 - (ortVetUnit.y * 3), 
+                    vetorCampo.x/1000 + vetorPosicao.x*1000 + (ortVetUnit.x * 3),
+                    vetorCampo.y/1000 + vetorPosicao.y*1000 + (ortVetUnit.y * 3), 
+                    al_map_rgb(140,156,204));
+
                 al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
                 al_draw_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
                 interface.drawInterface(mouse);
@@ -128,8 +154,12 @@ int main(){
             else if(event.type == ALLEGRO_EVENT_KEY_DOWN){
                 /*TODO: implement keyboard functions*/
                 switch (event.keyboard.keycode){
-                case ALLEGRO_KEY_ENTER:
+                case ALLEGRO_KEY_X:
                     reset = true;
+                    break;
+                case ALLEGRO_KEY_ENTER:
+                    for (int i = 0; i < 10; i ++)
+                        p.push_back(ElementarCharge(true));
                     break;
                 case ALLEGRO_KEY_ESCAPE:
                     exit = true;
@@ -147,7 +177,7 @@ int main(){
                 mouse.y = event.mouse.y;
                 if(eletroMeterActived){
                     eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
-                    eletricFieldMousePos = setEletricFieldVectorinPoint(molecules, numCharges, eletricFieldMousePos.position);
+                    eletricFieldMousePos = setEletricFieldVectorinPoint(molecules, p.size(), eletricFieldMousePos.position);
                 }
             }
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
@@ -175,12 +205,12 @@ int main(){
                 else{
                     if (insertNegCharge){
                         p.push_back(ElementarCharge(mouse.x / 1000, mouse.y / 1000, 0, -25*pow(10, -9)));
-                        numCharges ++;
+                        
                         insertNegCharge = false;
                     }
                     else if (insertPosCharge){
                         p.push_back(ElementarCharge(mouse.x / 1000, mouse.y / 1000, 0, 25*pow(10, -9)));
-                        numCharges ++;
+                        
                         insertPosCharge = false;
                     }
                 }
@@ -197,7 +227,7 @@ int main(){
             
             particleRemaining = false;
 
-            for (int i = 0; i < numCharges; i ++)
+            for (int i = 0; i < p.size(); i ++)
                 if (p[i].isPositioned())
                     particleRemaining = true;
             

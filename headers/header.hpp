@@ -27,3 +27,4 @@ Coord setUnityVetor(Coord p1, Coord p2);
 EletricField setEletricFieldVectorinPoint(std::vector<ElementarCharge> *m, int size, Coord p);
 void allegroStart(int w, int h, ALLEGRO_DISPLAY *display);
 Coord calcEletricField(ElementarCharge m, Coord p);
+Coord ortogonalVector(Coord vect);
