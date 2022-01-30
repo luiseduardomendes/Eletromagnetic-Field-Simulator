@@ -107,32 +107,33 @@ int main(){
                 for(int i = 0; i < p.size(); i ++)
                     if (p[i].isPositioned())
                         interface.drawParticle(p[i]);
-                if(eletroMeterActived)
+                if(eletroMeterActived){
                     al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
-                al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(140,156,172),2);
+                    al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(140,156,172),2);
 
-                vetorCampo.x = eletricFieldMousePos.vectorField.x;
-                vetorCampo.y = eletricFieldMousePos.vectorField.y;
-                vetorCampo.z = eletricFieldMousePos.vectorField.z;
-                
-                vetorPosicao.x = eletricFieldMousePos.position.x;
-                vetorPosicao.y = eletricFieldMousePos.position.y;
-                vetorPosicao.z = eletricFieldMousePos.position.z;
+                    vetorCampo.x = eletricFieldMousePos.vectorField.x;
+                    vetorCampo.y = eletricFieldMousePos.vectorField.y;
+                    vetorCampo.z = eletricFieldMousePos.vectorField.z;
+                    
+                    vetorPosicao.x = eletricFieldMousePos.position.x;
+                    vetorPosicao.y = eletricFieldMousePos.position.y;
+                    vetorPosicao.z = eletricFieldMousePos.position.z;
 
-                vetorUnitario = setUnityVetor(vetorPosicao, vetorCampo);
-                ortVetUnit = ortogonalVector(vetorUnitario);
+                    vetorUnitario = setUnityVetor(vetorPosicao, vetorCampo);
+                    ortVetUnit = ortogonalVector(vetorUnitario);
 
-                cout << "unitario: " << vetorUnitario.x << ", " << vetorUnitario.y << endl;
-                cout << "ortogonal: "<< ortVetUnit.x << ", " << ortVetUnit.y << endl;
+                    cout << "unitario: " << vetorUnitario.x << ", " << vetorUnitario.y << endl;
+                    cout << "ortogonal: "<< ortVetUnit.x << ", " << ortVetUnit.y << endl;
 
-                al_draw_filled_triangle(
-                    vetorCampo.x/1000 + vetorPosicao.x*1000 + (vetorUnitario.x * 9), 
-                    vetorCampo.y/1000 + vetorPosicao.y*1000 + (vetorUnitario.y * 9), 
-                    vetorCampo.x/1000 + vetorPosicao.x*1000 - (ortVetUnit.x * 3), 
-                    vetorCampo.y/1000 + vetorPosicao.y*1000 - (ortVetUnit.y * 3), 
-                    vetorCampo.x/1000 + vetorPosicao.x*1000 + (ortVetUnit.x * 3),
-                    vetorCampo.y/1000 + vetorPosicao.y*1000 + (ortVetUnit.y * 3), 
-                    al_map_rgb(140,156,204));
+                    al_draw_filled_triangle(
+                        vetorCampo.x/1000 + vetorPosicao.x*1000 + (vetorUnitario.x * 9), 
+                        vetorCampo.y/1000 + vetorPosicao.y*1000 + (vetorUnitario.y * 9), 
+                        vetorCampo.x/1000 + vetorPosicao.x*1000 - (ortVetUnit.x * 3), 
+                        vetorCampo.y/1000 + vetorPosicao.y*1000 - (ortVetUnit.y * 3), 
+                        vetorCampo.x/1000 + vetorPosicao.x*1000 + (ortVetUnit.x * 3),
+                        vetorCampo.y/1000 + vetorPosicao.y*1000 + (ortVetUnit.y * 3), 
+                        al_map_rgb(140,156,204));
+                }
 
                 al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
                 al_draw_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
