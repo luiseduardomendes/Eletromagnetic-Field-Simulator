@@ -2,14 +2,13 @@
 
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_native_dialog.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
-
-#define NUM_PARTICLES 10
 
 typedef struct {
     double x, y, z;
@@ -25,6 +24,6 @@ typedef struct {
 
 double dist(Coord p1, Coord p2);
 Coord setUnityVetor(Coord p1, Coord p2);
-EletricField setEletricFieldVectorinPoint(ElementarCharge *m, Coord p);
+EletricField setEletricFieldVectorinPoint(std::vector<ElementarCharge> *m, int size, Coord p);
 void allegroStart(int w, int h, ALLEGRO_DISPLAY *display);
 Coord calcEletricField(ElementarCharge m, Coord p);

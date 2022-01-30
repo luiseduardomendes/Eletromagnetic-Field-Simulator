@@ -1,14 +1,22 @@
 #include "headers/header.hpp"
-
+using namespace std;
 int main(){
-    ElementarCharge p[NUM_PARTICLES];
+    vector<ElementarCharge> *molecules = new vector<ElementarCharge>;
+    vector<ElementarCharge> &p = *molecules;
     EletricField eletricFieldMousePos;
+
+    for(int i = 0; i < 10; i ++)
+        p.push_back(ElementarCharge());
+
+    int numCharges = 10;
 
     Interface interface;
     Coord mouse;
 
     bool particleRemaining, exit = false, reset = false, pause = false;
     bool eletroMeterActived = false;
+    bool insertPosCharge = false;
+    bool insertNegCharge = false;
 
     double v, d;
     Coord vet;
@@ -52,7 +60,7 @@ int main(){
 
     while(!exit){
 
-        for (int i = 1; i < NUM_PARTICLES; i ++)
+        for (int i = 0; i < numCharges; i ++)
             p[i] = ElementarCharge(true);
         //p[0] = ElementarCharge(true);
 
@@ -65,11 +73,11 @@ int main(){
             
             if(event.type == ALLEGRO_EVENT_TIMER){
                 if (!pause){
-                    for(int i = 0; i < NUM_PARTICLES; i ++){
+                    for(int i = 0; i < numCharges; i ++){
                         p[i].kinect.setAceleration(0, 0, 0);
                         
                         EletricField e(p[i].kinect.position.x, p[i].kinect.position.y, 0);
-                        e = setEletricFieldVectorinPoint(p, p[i].kinect.position);
+                        e = setEletricFieldVectorinPoint(molecules, numCharges, p[i].kinect.position);
                         e.vectorField.x *= p[i].eletric.charge;
                         e.vectorField.y *= p[i].eletric.charge;  
 
@@ -78,7 +86,7 @@ int main(){
                         p[i].eletric.eletricFieldResultant.setVectorField(e.vectorField.x, e.vectorField.y, e.vectorField.z);
                         p[i].setAceleration();
 
-                        for(int j = 0; j < NUM_PARTICLES; j ++){
+                        for(int j = 0; j < numCharges; j ++){
                             if (i != j){
                                 d = dist(p[i].kinect.position, p[j].kinect.position);
                                 if(abs(d) <= 0.015)
@@ -94,16 +102,24 @@ int main(){
                 
                 al_clear_to_color(al_map_rgb(5,10,25));
                 interface.drawGrid();
-                for(int i = 0; i < NUM_PARTICLES; i ++)
+                for(int i = 0; i < numCharges; i ++)
                     if (p[i].isPositioned())
                         interface.drawParticle(p[i]);
-                
-                al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
+                if(eletroMeterActived)
+                    al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
                 al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(255,255,255),3);
-                al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgb(128,128,128));
+                al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
+                al_draw_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
                 interface.drawInterface(mouse);
                 if(eletroMeterActived){
                     al_draw_scaled_bitmap(interface.eletromagMeter, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
+                }
+                else if(insertPosCharge){
+                    al_draw_scaled_bitmap(interface.posCharge, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
+                }
+                else if(insertNegCharge){
+                    al_draw_scaled_bitmap(interface.negCharge, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
+
                 }
                 
                 al_flip_display();
@@ -131,16 +147,22 @@ int main(){
                 mouse.y = event.mouse.y;
                 if(eletroMeterActived){
                     eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
-                    eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
+                    eletricFieldMousePos = setEletricFieldVectorinPoint(molecules, numCharges, eletricFieldMousePos.position);
                 }
             }
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
                 if (mouse.x > (widht/2)-96 && mouse.x < (widht/2)-32 && mouse.y > (height)-96 && mouse.y < (height)-32){
-                    
+                    if(insertPosCharge)
+                        insertPosCharge = false;
+                    else    
+                        insertPosCharge = true;
                     
                 }
                 else if (mouse.x > (widht/2) && mouse.x < (widht/2)+64 && mouse.y > (height)-96 && mouse.y < (height)-32){
-                    
+                    if(insertNegCharge)
+                        insertNegCharge = false;
+                    else    
+                        insertNegCharge = true;
                     
                 }
                 else if (mouse.x > (widht/2)+96 && mouse.x < (widht/2)+160 && mouse.y > (height)-96 && mouse.y < (height)-32){
@@ -149,6 +171,18 @@ int main(){
                     else    
                         eletroMeterActived = true;
                     
+                }
+                else{
+                    if (insertNegCharge){
+                        p.push_back(ElementarCharge(mouse.x / 1000, mouse.y / 1000, 0, -25*pow(10, -9)));
+                        numCharges ++;
+                        insertNegCharge = false;
+                    }
+                    else if (insertPosCharge){
+                        p.push_back(ElementarCharge(mouse.x / 1000, mouse.y / 1000, 0, 25*pow(10, -9)));
+                        numCharges ++;
+                        insertPosCharge = false;
+                    }
                 }
             }
 
@@ -163,7 +197,7 @@ int main(){
             
             particleRemaining = false;
 
-            for (int i = 0; i < NUM_PARTICLES; i ++)
+            for (int i = 0; i < numCharges; i ++)
                 if (p[i].isPositioned())
                     particleRemaining = true;
             

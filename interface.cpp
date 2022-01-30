@@ -16,9 +16,9 @@ void Interface::drawInterface(Coord mouse){
         sizeMet = 32;
         
     }
-    al_draw_scaled_bitmap(posCharge, 0, 0, 64, 64, (width/2)-96 - (sizePos/2), height - 96 - (sizePos/2), 64+sizePos, 64+sizePos, ALLEGRO_ALIGN_CENTER);
-    al_draw_scaled_bitmap(negCharge, 0, 0, 64, 64, (width/2) - (sizeNeg/2), height - 96 - (sizeNeg/2), 64+sizeNeg, 64+sizeNeg, ALLEGRO_ALIGN_CENTER);
-    al_draw_scaled_bitmap(eletromagMeter, 0, 0, 64, 64, (width/2)+96 - (sizeMet/2), height - 96 - (sizeMet/2), 64+sizeMet, 64+sizeMet, ALLEGRO_ALIGN_CENTER);
+    al_draw_tinted_scaled_bitmap(posCharge, al_map_rgb_f(0.75,0.75,0.75),0, 0, 64, 64, (width/2)-96 - (sizePos/2), height - 96 - (sizePos/2), 64+sizePos, 64+sizePos, ALLEGRO_ALIGN_CENTER);
+    al_draw_tinted_scaled_bitmap(negCharge,al_map_rgb_f(0.75,0.75,0.75), 0, 0, 64, 64, (width/2) - (sizeNeg/2), height - 96 - (sizeNeg/2), 64+sizeNeg, 64+sizeNeg, ALLEGRO_ALIGN_CENTER);
+    al_draw_tinted_scaled_bitmap(eletromagMeter,al_map_rgb_f(0.75,0.75,0.75), 0, 0, 64, 64, (width/2)+96 - (sizeMet/2), height - 96 - (sizeMet/2), 64+sizeMet, 64+sizeMet, ALLEGRO_ALIGN_CENTER);
 
     
     

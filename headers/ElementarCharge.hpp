@@ -4,6 +4,7 @@ class ElementarCharge{
 public:
     ElementarCharge();
     ElementarCharge(bool random);
+    ElementarCharge(double x, double y, double z, double charge);
 
     EletricStatus eletric;
     KinectStatus kinect;

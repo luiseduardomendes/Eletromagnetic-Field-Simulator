@@ -12,6 +12,17 @@ ElementarCharge::ElementarCharge(bool random){
     positioned = true;
 }
 
+ElementarCharge::ElementarCharge(double x, double y, double z, double charge){
+    kinect = KinectStatus();
+    kinect.position.x = x;
+    kinect.position.y = y;
+    kinect.position.z = z;
+    eletric = EletricStatus();
+    eletric.charge = charge;
+    eletric.eletricFieldResultant.position = kinect.position;
+    positioned = true;
+}
+
 void ElementarCharge::moveParticle(){
     kinect.position.x += kinect.speed.x;
     kinect.position.y += kinect.speed.y;

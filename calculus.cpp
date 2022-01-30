@@ -15,15 +15,15 @@ Coord setUnityVetor(Coord p1, Coord p2){
     return vet;
 }
 
-EletricField setEletricFieldVectorinPoint(ElementarCharge *m, Coord p){
+EletricField setEletricFieldVectorinPoint(std::vector<ElementarCharge> *m, int size, Coord p){
     EletricField e = EletricField(p.x, p.y, p.z);
 
-    for (int i = 0; i < NUM_PARTICLES; i ++)
-        if (m[i].isPositioned())
-            e.addNewForceVector(calcEletricField(m[i], p));
-            
-    
-        
+    std::vector<ElementarCharge> &m1 = *m;
+
+    for (int i = 0; i < size; i ++)
+        if (m1[i].isPositioned())
+            e.addNewForceVector(calcEletricField(m1[i], p));
+
     return e;
 }
 
