@@ -8,7 +8,7 @@ public:
     void loadBitmaps();
 
     void drawParticle(ElementarCharge e);
-    void drawInterface(Coord mouse);
+    void drawInterface(Coord mouse, ALLEGRO_DISPLAY *display);
     void drawGrid();
 
 

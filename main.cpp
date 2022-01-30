@@ -137,7 +137,7 @@ int main(){
 
                 al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
                 al_draw_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
-                interface.drawInterface(mouse);
+                interface.drawInterface(mouse, display);
                 if(eletroMeterActived){
                     al_draw_scaled_bitmap(interface.eletromagMeter, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
                 }

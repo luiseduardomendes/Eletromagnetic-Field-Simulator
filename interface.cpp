@@ -1,26 +1,30 @@
 #include "headers/header.hpp"
 
-void Interface::drawInterface(Coord mouse){
+void Interface::drawInterface(Coord mouse, ALLEGRO_DISPLAY *display){
     int sizePos = 0, sizeNeg = 0, sizeMet = 0;
-
-
-    if (mouse.x > (width/2)-96 && mouse.x < (width/2)-32 && mouse.y > (height)-96 && mouse.y < (height)-32){
+    if (mouse.x > (width/2)-96 && mouse.x < (width/2)-32 && mouse.y > (height)-96 && mouse.y < (height)-32)
         sizePos = 32;
-        
-    }
-    else if (mouse.x > (width/2) && mouse.x < (width/2)+64 && mouse.y > (height)-96 && mouse.y < (height)-32){
+    
+    else if (mouse.x > (width/2) && mouse.x < (width/2)+64 && mouse.y > (height)-96 && mouse.y < (height)-32)
         sizeNeg = 32;
-        
-    }
-    else if (mouse.x > (width/2)+96 && mouse.x < (width/2)+160 && mouse.y > (height)-96 && mouse.y < (height)-32){
+    
+    else if (mouse.x > (width/2)+96 && mouse.x < (width/2)+160 && mouse.y > (height)-96 && mouse.y < (height)-32)
         sizeMet = 32;
         
-    }
-    al_draw_tinted_scaled_bitmap(posCharge, al_map_rgb_f(0.75,0.75,0.75),0, 0, 64, 64, (width/2)-96 - (sizePos/2), height - 96 - (sizePos/2), 64+sizePos, 64+sizePos, ALLEGRO_ALIGN_CENTER);
-    al_draw_tinted_scaled_bitmap(negCharge,al_map_rgb_f(0.75,0.75,0.75), 0, 0, 64, 64, (width/2) - (sizeNeg/2), height - 96 - (sizeNeg/2), 64+sizeNeg, 64+sizeNeg, ALLEGRO_ALIGN_CENTER);
-    al_draw_tinted_scaled_bitmap(eletromagMeter,al_map_rgb_f(0.75,0.75,0.75), 0, 0, 64, 64, (width/2)+96 - (sizeMet/2), height - 96 - (sizeMet/2), 64+sizeMet, 64+sizeMet, ALLEGRO_ALIGN_CENTER);
+    al_set_target_bitmap(interface);
+    al_clear_to_color(al_map_rgba_f(0,0,0,0));
+    
+    al_draw_tinted_scaled_bitmap(posCharge, al_map_rgb_f(0.75,0.75,0.75),0, 0, 64, 64, 16 - (sizePos/2), 16 - (sizePos/2), 64+sizePos, 64+sizePos, 1);
+
+
+    al_draw_tinted_scaled_bitmap(negCharge,al_map_rgb_f(0.75,0.75,0.75), 0, 0, 64, 64, 16 + 96 - (sizeNeg/2), 16 - (sizeNeg/2), 64+sizeNeg, 64+sizeNeg, ALLEGRO_ALIGN_CENTER);
 
     
+    al_draw_tinted_scaled_bitmap(eletromagMeter,al_map_rgb_f(0.75,0.75,0.75), 0, 0, 64, 64, 16 + 192 - (sizeMet/2), 16 - (sizeMet/2), 64+sizeMet, 64+sizeMet, ALLEGRO_ALIGN_CENTER);
+
+    al_set_target_bitmap(al_get_backbuffer(display));   
+
+    al_draw_bitmap(interface, width/2 - 112,height - 112,0); 
     
 }
 void Interface::initInterface(int w, int h){
