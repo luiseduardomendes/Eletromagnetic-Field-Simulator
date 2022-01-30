@@ -8,6 +8,7 @@ int main(){
     Coord mouse;
 
     bool particleRemaining, exit = false, reset = false, pause = false;
+    bool eletroMeterActived = false;
 
     double v, d;
     Coord vet;
@@ -50,9 +51,12 @@ int main(){
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
     while(!exit){
-        for (int i = 0; i < NUM_PARTICLES; i ++)
+
+        for (int i = 1; i < NUM_PARTICLES; i ++)
             p[i] = ElementarCharge(true);
-        
+        //p[0] = ElementarCharge(true);
+
+
         reset = false;
         
         while(!reset){
@@ -95,9 +99,12 @@ int main(){
                         interface.drawParticle(p[i]);
                 
                 al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
-                al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 - eletricFieldMousePos.vectorField.y/1000), al_map_rgb(255,255,255),3);
+                al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(255,255,255),3);
                 al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgb(128,128,128));
                 interface.drawInterface(mouse);
+                if(eletroMeterActived){
+                    al_draw_scaled_bitmap(interface.eletromagMeter, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
+                }
                 
                 al_flip_display();
             }
@@ -122,10 +129,27 @@ int main(){
             else if(event.type == ALLEGRO_EVENT_MOUSE_AXES){
                 mouse.x = event.mouse.x;
                 mouse.y = event.mouse.y;
+                if(eletroMeterActived){
+                    eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
+                    eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
+                }
             }
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
-                eletricFieldMousePos = setEletricFieldVectorinPoint(p, eletricFieldMousePos.position);
+                if (mouse.x > (widht/2)-96 && mouse.x < (widht/2)-32 && mouse.y > (height)-96 && mouse.y < (height)-32){
+                    
+                    
+                }
+                else if (mouse.x > (widht/2) && mouse.x < (widht/2)+64 && mouse.y > (height)-96 && mouse.y < (height)-32){
+                    
+                    
+                }
+                else if (mouse.x > (widht/2)+96 && mouse.x < (widht/2)+160 && mouse.y > (height)-96 && mouse.y < (height)-32){
+                    if(eletroMeterActived)
+                        eletroMeterActived = false;
+                    else    
+                        eletroMeterActived = true;
+                    
+                }
             }
 
             /* TODO: create an object ElementarCharge and EletricStatus

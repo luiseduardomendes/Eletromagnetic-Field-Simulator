@@ -11,7 +11,7 @@ public:
     void drawInterface(Coord mouse);
     void drawGrid();
 
-private:
+
 
     ALLEGRO_BITMAP *posCharge, *negCharge, *eletromagMeter; 
     ALLEGRO_BITMAP *interface;

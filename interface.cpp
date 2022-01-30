@@ -4,15 +4,15 @@ void Interface::drawInterface(Coord mouse){
     int sizePos = 0, sizeNeg = 0, sizeMet = 0;
 
 
-    if (mouse.x > (width/2)-128 && mouse.x < (width/2)-64 && mouse.y > (height)-128 && mouse.y < (height)-64){
+    if (mouse.x > (width/2)-96 && mouse.x < (width/2)-32 && mouse.y > (height)-96 && mouse.y < (height)-32){
         sizePos = 32;
         
     }
-    else if (mouse.x > (width/2)-32 && mouse.x < (width/2)+32 && mouse.y > (height)-128 && mouse.y < (height)-64){
+    else if (mouse.x > (width/2) && mouse.x < (width/2)+64 && mouse.y > (height)-96 && mouse.y < (height)-32){
         sizeNeg = 32;
         
     }
-    else if (mouse.x > (width/2)+64 && mouse.x < (width/2)+128 && mouse.y > (height)-128 && mouse.y < (height)-64){
+    else if (mouse.x > (width/2)+96 && mouse.x < (width/2)+160 && mouse.y > (height)-96 && mouse.y < (height)-32){
         sizeMet = 32;
         
     }
@@ -36,9 +36,9 @@ void Interface::drawParticle(ElementarCharge e){
     ALLEGRO_COLOR color;
     
     if(e.eletric.charge < 0)
-        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x * 1000), (e.kinect.position.y * 1000), 20, 20, 0);
+        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x * 1000)-10, (e.kinect.position.y * 1000)-10, 20, 20, 0);
     else
-        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x * 1000), (e.kinect.position.y * 1000), 20, 20, 0);
+        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x * 1000)-10, (e.kinect.position.y * 1000)-10, 20, 20, 0);
     
 }
 
