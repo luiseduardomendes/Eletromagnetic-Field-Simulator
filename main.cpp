@@ -5,6 +5,15 @@ int main(){
     vector<ElementarCharge> &p = *molecules;
     EletricField eletricFieldMousePos;
 
+    enum {btn_insertPosCharge, btn_insertNegCharge, btn_activeEletricMeter};
+    vector<Button> *buttons = new vector<Button>;
+    vector<Button> &b = *buttons;
+
+    
+
+    
+    
+
     for(int i = 0; i < 10; i ++)
         p.push_back(ElementarCharge());
 
@@ -60,7 +69,30 @@ int main(){
     al_register_event_source(eventQueue, al_get_mouse_event_source());
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
-    
+    Button btn_buffer;
+    btn_buffer.bitmap = al_load_bitmap("assets/proton.png");
+    btn_buffer.hitbox.infLeft.x = widht/2 - 148 + 16;
+    btn_buffer.hitbox.infLeft.y = height - 96;
+    btn_buffer.hitbox.supRight.x = widht/2 - 148 + 80;
+    btn_buffer.hitbox.supRight.y = height - 32;
+
+    b.push_back(btn_buffer);
+
+    btn_buffer.bitmap = al_load_bitmap("assets/eletron.png");
+    btn_buffer.hitbox.infLeft.x = widht/2 - 32;
+    btn_buffer.hitbox.infLeft.y = height - 96;
+    btn_buffer.hitbox.supRight.x = widht/2 + 32;
+    btn_buffer.hitbox.supRight.y = height - 32;
+
+    b.push_back(btn_buffer);
+
+    btn_buffer.bitmap = al_load_bitmap("assets/target.png");
+    btn_buffer.hitbox.infLeft.x = widht/2 + 148 - 80;
+    btn_buffer.hitbox.infLeft.y = height - 96;
+    btn_buffer.hitbox.supRight.x = widht/2 + 148 - 16;
+    btn_buffer.hitbox.supRight.y = height - 32;
+
+    b.push_back(btn_buffer);
 
     while(!exit){
         p.clear();
@@ -80,8 +112,6 @@ int main(){
                         e = setEletricFieldVectorinPoint(molecules, p.size(), p[i].kinect.position);
                         e.vectorField.x *= p[i].eletric.charge;
                         e.vectorField.y *= p[i].eletric.charge;  
-
-                        //std::cout << e.vectorField.x << ", " << e.vectorField.y << std::endl;
                         
                         p[i].eletric.eletricFieldResultant.setVectorField(e.vectorField.x, e.vectorField.y, e.vectorField.z);
                         p[i].setAceleration();
@@ -89,7 +119,7 @@ int main(){
                         for(int j = 0; j < p.size(); j ++){
                             if (i != j){
                                 d = dist(p[i].kinect.position, p[j].kinect.position);
-                                if(abs(d) <= 0.015)
+                                if(abs(d) <= 15*PSM)
                                     p[i].kinect.setSpeed(0,0,0);
                             }
                         }
@@ -108,8 +138,10 @@ int main(){
                     if (p[i].isPositioned())
                         interface.drawParticle(p[i]);
                 if(eletroMeterActived){
-                    al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
-                    al_draw_line(eletricFieldMousePos.position.x*1000, eletricFieldMousePos.position.y*1000, (eletricFieldMousePos.position.x*1000 + eletricFieldMousePos.vectorField.x/1000), (eletricFieldMousePos.position.y*1000 + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(140,156,172),2);
+                    
+                    al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
+                    
+                    al_draw_line(eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, (eletricFieldMousePos.position.x/PSM + eletricFieldMousePos.vectorField.x*PSM), (eletricFieldMousePos.position.y/PSM + eletricFieldMousePos.vectorField.y*PSM), al_map_rgb(140,156,172),2);
 
                     vetorCampo.x = eletricFieldMousePos.vectorField.x;
                     vetorCampo.y = eletricFieldMousePos.vectorField.y;
@@ -122,22 +154,20 @@ int main(){
                     vetorUnitario = setUnityVetor(vetorPosicao, vetorCampo);
                     ortVetUnit = ortogonalVector(vetorUnitario);
 
-                    cout << "unitario: " << vetorUnitario.x << ", " << vetorUnitario.y << endl;
-                    cout << "ortogonal: "<< ortVetUnit.x << ", " << ortVetUnit.y << endl;
-
                     al_draw_filled_triangle(
-                        vetorCampo.x/1000 + vetorPosicao.x*1000 + (vetorUnitario.x * 9), 
-                        vetorCampo.y/1000 + vetorPosicao.y*1000 + (vetorUnitario.y * 9), 
-                        vetorCampo.x/1000 + vetorPosicao.x*1000 - (ortVetUnit.x * 3), 
-                        vetorCampo.y/1000 + vetorPosicao.y*1000 - (ortVetUnit.y * 3), 
-                        vetorCampo.x/1000 + vetorPosicao.x*1000 + (ortVetUnit.x * 3),
-                        vetorCampo.y/1000 + vetorPosicao.y*1000 + (ortVetUnit.y * 3), 
+                        vetorCampo.x*PSM + vetorPosicao.x/PSM + (vetorUnitario.x * 9), 
+                        vetorCampo.y*PSM + vetorPosicao.y/PSM + (vetorUnitario.y * 9), 
+                        vetorCampo.x*PSM + vetorPosicao.x/PSM - (ortVetUnit.x * 3), 
+                        vetorCampo.y*PSM + vetorPosicao.y/PSM - (ortVetUnit.y * 3), 
+                        vetorCampo.x*PSM + vetorPosicao.x/PSM + (ortVetUnit.x * 3),
+                        vetorCampo.y*PSM + vetorPosicao.y/PSM + (ortVetUnit.y * 3), 
                         al_map_rgb(140,156,204));
                 }
 
-                al_draw_filled_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
-                al_draw_rectangle(widht/2 - 112, height - 112, widht/2 + 184, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
-                interface.drawInterface(mouse, display);
+                al_draw_filled_rectangle(widht/2 - 148, height - 112, widht/2 + 148, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
+                al_draw_rectangle(widht/2 - 148, height - 112, widht/2 + 148, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
+                //interface.drawInterface(mouse, display);
+                interface.drawButtons(b, mouse);
                 if(eletroMeterActived){
                     al_draw_scaled_bitmap(interface.eletromagMeter, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
                 }
@@ -177,26 +207,28 @@ int main(){
                 mouse.x = event.mouse.x;
                 mouse.y = event.mouse.y;
                 if(eletroMeterActived){
-                    eletricFieldMousePos = EletricField(event.mouse.x / 1000.0, event.mouse.y / 1000.0, 0);
+                    eletricFieldMousePos = EletricField(event.mouse.x * PSM, event.mouse.y * PSM, 0);
                     eletricFieldMousePos = setEletricFieldVectorinPoint(molecules, p.size(), eletricFieldMousePos.position);
                 }
             }
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN){
-                if (mouse.x > (widht/2)-96 && mouse.x < (widht/2)-32 && mouse.y > (height)-96 && mouse.y < (height)-32){
+                mouse.x = event.mouse.x;
+                mouse.y = event.mouse.y;
+                if (pointInsideBox(mouse, b[btn_insertPosCharge].hitbox)){
                     if(insertPosCharge)
                         insertPosCharge = false;
                     else    
                         insertPosCharge = true;
                     
                 }
-                else if (mouse.x > (widht/2) && mouse.x < (widht/2)+64 && mouse.y > (height)-96 && mouse.y < (height)-32){
+                else if (pointInsideBox(mouse, b[btn_insertNegCharge].hitbox)){
                     if(insertNegCharge)
                         insertNegCharge = false;
                     else    
                         insertNegCharge = true;
                     
                 }
-                else if (mouse.x > (widht/2)+96 && mouse.x < (widht/2)+160 && mouse.y > (height)-96 && mouse.y < (height)-32){
+                else if (pointInsideBox(mouse, b[btn_activeEletricMeter].hitbox)){
                     if(eletroMeterActived)
                         eletroMeterActived = false;
                     else    
@@ -205,12 +237,12 @@ int main(){
                 }
                 else{
                     if (insertNegCharge){
-                        p.push_back(ElementarCharge(mouse.x / 1000, mouse.y / 1000, 0, -25*pow(10, -9)));
+                        p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, -25*pow(10, -9)));
                         
                         insertNegCharge = false;
                     }
                     else if (insertPosCharge){
-                        p.push_back(ElementarCharge(mouse.x / 1000, mouse.y / 1000, 0, 25*pow(10, -9)));
+                        p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, 25*pow(10, -9)));
                         
                         insertPosCharge = false;
                     }

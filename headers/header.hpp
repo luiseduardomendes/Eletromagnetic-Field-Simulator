@@ -13,8 +13,13 @@
 typedef struct {
     double x, y, z;
 } Coord;
+typedef struct Hitbox{
+    Coord infLeft, supRight;
+}Hitbox;
 
+#define PSM 0.001 //PIXEL_SIZE_IN_METERS
 
+#include "buttons.hpp"
 #include "EletricField.hpp"
 #include "EletricStatus.hpp"
 #include "kinectStatus.hpp"
@@ -28,3 +33,5 @@ EletricField setEletricFieldVectorinPoint(std::vector<ElementarCharge> *m, int s
 void allegroStart(int w, int h, ALLEGRO_DISPLAY *display);
 Coord calcEletricField(ElementarCharge m, Coord p);
 Coord ortogonalVector(Coord vect);
+bool isHitboxIn(Hitbox HB1, Hitbox HB2);
+bool pointInsideBox(Coord point_, Hitbox box_);

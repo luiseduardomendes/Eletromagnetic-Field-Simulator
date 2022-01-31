@@ -30,7 +30,9 @@ void ElementarCharge::moveParticle(){
 }
 
 void ElementarCharge::setAceleration(){
-    kinect.aceleration = eletric.eletricFieldResultant.vectorField;
+    kinect.aceleration.x = eletric.eletricFieldResultant.vectorField.x / kinect.mass;
+    kinect.aceleration.y = eletric.eletricFieldResultant.vectorField.y / kinect.mass;
+    kinect.aceleration.z = eletric.eletricFieldResultant.vectorField.z / kinect.mass;
 }
 
 bool ElementarCharge::isPositioned(){

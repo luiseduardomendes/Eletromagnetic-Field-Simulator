@@ -10,6 +10,7 @@ public:
     void drawParticle(ElementarCharge e);
     void drawInterface(Coord mouse, ALLEGRO_DISPLAY *display);
     void drawGrid();
+    void drawButtons(std::vector<Button> btns, Coord mouse);
 
 
 

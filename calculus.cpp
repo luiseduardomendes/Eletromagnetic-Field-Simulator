@@ -53,3 +53,25 @@ Coord ortogonalVector(Coord vect){
     ort.z = 0;
     return ort;
 }
+
+bool pointInsideBox(Coord point_, Hitbox box_){
+    if (point_.x >= box_.infLeft.x && point_.x <= box_.supRight.x && point_.y >= box_.infLeft.y && point_.y <= box_.supRight.y)
+        return true;
+    else
+        return false;
+}
+
+bool isHitboxIn(Hitbox HB1, Hitbox HB2){
+    Coord aux1, aux2;
+
+    aux1.x = HB2.infLeft.x;
+    aux1.y = HB2.supRight.y;
+
+    aux2.x = HB2.supRight.x;
+    aux2.y = HB2.infLeft.y;
+
+    if (pointInsideBox(aux1, HB1) || pointInsideBox(aux2, HB1) ||
+            pointInsideBox(HB2.infLeft, HB1) || pointInsideBox(HB2.supRight, HB1))
+        return true;
+    return false;
+}

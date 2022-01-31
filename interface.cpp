@@ -40,9 +40,9 @@ void Interface::drawParticle(ElementarCharge e){
     ALLEGRO_COLOR color;
     
     if(e.eletric.charge < 0)
-        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x * 1000)-10, (e.kinect.position.y * 1000)-10, 20, 20, 0);
+        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x  / PSM)-10, (e.kinect.position.y / PSM)-10, 20, 20, 0);
     else
-        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x * 1000)-10, (e.kinect.position.y * 1000)-10, 20, 20, 0);
+        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x / PSM)-10, (e.kinect.position.y / PSM)-10, 20, 20, 0);
     
 }
 
@@ -63,3 +63,15 @@ void Interface::drawGrid(){
         al_draw_line(0, i, width, i, al_map_rgba_f(0.05,0.05,0.05,0.05), 1);
 }
 
+using namespace std;
+void Interface::drawButtons(vector<Button> btns, Coord mouse){
+    int growth;
+    
+    for(int i = 0; i < btns.size(); i ++){
+        if(pointInsideBox(mouse, btns[i].hitbox))
+            growth = 16;
+        else
+            growth = 0; 
+        al_draw_scaled_bitmap(btns[i].bitmap, 0, 0, 64, 64, btns[i].hitbox.infLeft.x - (growth/2), btns[i].hitbox.infLeft.y- (growth/2), 64 + growth, 64 + growth, 0);
+    }
+}

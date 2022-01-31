@@ -5,17 +5,19 @@ KinectStatus::KinectStatus(){
     setSpeed(0,0,0);
     setAceleration(0,0,0);
     timeGap = 1/60.0;
+    mass = 1;
 }
 
 KinectStatus::KinectStatus(bool random){
-    position.x = (rand() % 1000) / 1000.0;
-    position.y = (rand() % 600) / 1000.0;
+    position.x = (rand() % 1000) * PSM;
+    position.y = (rand() % 600) * PSM;
     position.z = 0;
 
     setSpeed(0,0,0);
     setAceleration(0,0,0);
 
     timeGap = 1/60.0;
+    mass = 1;
 }
 
 void KinectStatus::setPosition(double x_, double y_, double z_){
