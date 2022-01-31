@@ -9,7 +9,7 @@ int main(){
     vector<Button> *buttons = new vector<Button>;
     vector<Button> &b = *buttons;
 
-    
+    int chargeSelected = -1;    
 
     
     
@@ -140,7 +140,7 @@ int main(){
                 if(eletroMeterActived){
                     
                     al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
-                    
+
                     al_draw_line(eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, (eletricFieldMousePos.position.x/PSM + eletricFieldMousePos.vectorField.x*PSM), (eletricFieldMousePos.position.y/PSM + eletricFieldMousePos.vectorField.y*PSM), al_map_rgb(140,156,172),2);
 
                     vetorCampo.x = eletricFieldMousePos.vectorField.x;
@@ -177,6 +177,11 @@ int main(){
                 else if(insertNegCharge){
                     al_draw_scaled_bitmap(interface.negCharge, 0, 0, 64, 64, mouse.x-16, mouse.y-16, 32,32, 0);
 
+                }
+                if (chargeSelected != -1){
+                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2, 0, "carga: %.2eC", p[chargeSelected].eletric.charge);
+                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+30, 0, "Posição: (%.2lf, %.2lf)m", p[chargeSelected].kinect.position.x, p[chargeSelected].kinect.position.y);
+                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+60, 0, "Massa: %.2ekg", p[chargeSelected].kinect.mass);
                 }
                 
                 al_flip_display();
@@ -245,6 +250,20 @@ int main(){
                         p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, 25*pow(10, -9)));
                         
                         insertPosCharge = false;
+                    }
+                    else{
+                        bool found;
+                        chargeSelected = -1;
+                        for (int i = 0; i < p.size(); i ++){
+                            Coord point;
+                            point.x = p[i].kinect.position.x / PSM;
+                            point.y = p[i].kinect.position.y / PSM;
+                            if (pointInsideCircle(mouse, point, 10))
+                                chargeSelected = i;
+                        }
+                            
+                        if (chargeSelected == -1)
+                            found = false;
                     }
                 }
             }

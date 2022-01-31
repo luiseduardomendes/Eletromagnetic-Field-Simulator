@@ -61,6 +61,13 @@ bool pointInsideBox(Coord point_, Hitbox box_){
         return false;
 }
 
+bool pointInsideCircle(Coord point_, Coord center, double radius){
+    if(dist(point_, center) <= radius)
+        return true;
+    else
+        return false;
+}
+
 bool isHitboxIn(Hitbox HB1, Hitbox HB2){
     Coord aux1, aux2;
 
