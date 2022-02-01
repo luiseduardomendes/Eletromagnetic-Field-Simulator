@@ -40,9 +40,9 @@ void Interface::drawParticle(ElementarCharge e){
     ALLEGRO_COLOR color;
     
     if(e.eletric.charge < 0)
-        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x  / PSM)-10, (e.kinect.position.y / PSM)-10, 20, 20, 0);
+        al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x)-10, (e.kinect.position.y)-10, 20, 20, 0);
     else
-        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x / PSM)-10, (e.kinect.position.y / PSM)-10, 20, 20, 0);
+        al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x)-10, (e.kinect.position.y)-10, 20, 20, 0);
     
 }
 

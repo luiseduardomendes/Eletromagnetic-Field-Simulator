@@ -117,7 +117,7 @@ int main(){
                         for(int j = 0; j < p.size(); j ++){
                             if (i != j){
                                 d = dist(p[i].kinect.position, p[j].kinect.position);
-                                if(abs(d) <= 15*PSM)
+                                if(abs(d) <= 15)
                                     p[i].kinect.setSpeed(0,0,0);
                             }
                         }
@@ -144,28 +144,28 @@ int main(){
                         
                 if(eletroMeterActived){
                     
-                    al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
+                    al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x, 
+                    eletricFieldMousePos.position.y, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, 
+                    -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
 
-                    al_draw_line(eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, (eletricFieldMousePos.position.x/PSM + eletricFieldMousePos.vectorField.x*PSM), (eletricFieldMousePos.position.y/PSM + eletricFieldMousePos.vectorField.y*PSM), al_map_rgb(140,156,172),2);
+                    al_draw_line(eletricFieldMousePos.position.x, eletricFieldMousePos.position.y, 
+                    (eletricFieldMousePos.position.x + eletricFieldMousePos.vectorField.x/1000), 
+                    (eletricFieldMousePos.position.y + eletricFieldMousePos.vectorField.y/1000), al_map_rgb(140,156,172),2);
 
-                    vetorCampo.x = eletricFieldMousePos.vectorField.x;
-                    vetorCampo.y = eletricFieldMousePos.vectorField.y;
-                    vetorCampo.z = eletricFieldMousePos.vectorField.z;
+                    vetorCampo = eletricFieldMousePos.vectorField;
                     
-                    vetorPosicao.x = eletricFieldMousePos.position.x;
-                    vetorPosicao.y = eletricFieldMousePos.position.y;
-                    vetorPosicao.z = eletricFieldMousePos.position.z;
+                    vetorPosicao = eletricFieldMousePos.position;
 
                     vetorUnitario = setUnityVetor(vetorPosicao, vetorCampo);
                     ortVetUnit = ortogonalVector(vetorUnitario);
 
                     al_draw_filled_triangle(
-                        vetorCampo.x*PSM + vetorPosicao.x/PSM + (vetorUnitario.x * 9), 
-                        vetorCampo.y*PSM + vetorPosicao.y/PSM + (vetorUnitario.y * 9), 
-                        vetorCampo.x*PSM + vetorPosicao.x/PSM - (ortVetUnit.x * 3), 
-                        vetorCampo.y*PSM + vetorPosicao.y/PSM - (ortVetUnit.y * 3), 
-                        vetorCampo.x*PSM + vetorPosicao.x/PSM + (ortVetUnit.x * 3),
-                        vetorCampo.y*PSM + vetorPosicao.y/PSM + (ortVetUnit.y * 3), 
+                        vetorCampo.x/1000 + vetorPosicao.x + (vetorUnitario.x * 9), 
+                        vetorCampo.y/1000 + vetorPosicao.y + (vetorUnitario.y * 9), 
+                        vetorCampo.x/1000 + vetorPosicao.x - (ortVetUnit.x * 3), 
+                        vetorCampo.y/1000 + vetorPosicao.y - (ortVetUnit.y * 3), 
+                        vetorCampo.x/1000 + vetorPosicao.x + (ortVetUnit.x * 3),
+                        vetorCampo.y/1000 + vetorPosicao.y + (ortVetUnit.y * 3), 
                         al_map_rgb(140,156,204));
                 }
 
@@ -185,8 +185,8 @@ int main(){
                 }
                 if (chargeSelected != -1){
                     al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2, 0, "carga: %.2eC", p[chargeSelected].eletric.charge);
-                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+30, 0, "Posição: (%.2lf, %.2lf)m", p[chargeSelected].kinect.position.x, p[chargeSelected].kinect.position.y);
-                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+60, 0, "Massa: %.2ekg", p[chargeSelected].kinect.mass);
+                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+30, 0, "Posição: (%.2lf, %.2lf)m", p[chargeSelected].kinect.position.x * PSM, p[chargeSelected].kinect.position.y * PSM);
+                    al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+60, 0, "Massa: %.2ekg", p[chargeSelected].kinect.mass * MASS_CTE);
                 }
                 
                 al_flip_display();
@@ -217,7 +217,7 @@ int main(){
                 mouse.x = event.mouse.x;
                 mouse.y = event.mouse.y;
                 if(eletroMeterActived){
-                    eletricFieldMousePos = EletricField(event.mouse.x * PSM, event.mouse.y * PSM, 0);
+                    eletricFieldMousePos = EletricField(event.mouse.x, event.mouse.y, 0);
                     eletricFieldMousePos = setEletricFieldVectorinPoint(molecules, p.size(), eletricFieldMousePos.position);
                 }
             }
@@ -250,10 +250,7 @@ int main(){
                     bool found;
                     chargeSelected = -1;
                     for (int i = 0; i < p.size(); i ++){
-                        Coord point;
-                        point.x = p[i].kinect.position.x / PSM;
-                        point.y = p[i].kinect.position.y / PSM;
-                        if (pointInsideCircle(mouse, point, 10))
+                        if (pointInsideCircle(mouse, p[i].kinect.position, 10))
                             chargeSelected = i;
                     }
                         
@@ -268,18 +265,18 @@ int main(){
             }
             else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
                 if (changingPosition != -1){
-                    p[changingPosition].kinect.position.x = mouse.x * PSM;
-                    p[changingPosition].kinect.position.y = mouse.y * PSM;
+                    p[changingPosition].kinect.position.x = mouse.x;
+                    p[changingPosition].kinect.position.y = mouse.y;
                     changingPosition = -1;
                 }
                 else{
                     if (insertNegCharge){
-                        p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, -25*pow(10, -9)));
+                        p.push_back(ElementarCharge(mouse.x, mouse.y, 0, -25*pow(10, -3)));
                         
                         insertNegCharge = false;
                     }
                     else if (insertPosCharge){
-                        p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, 25*pow(10, -9)));
+                        p.push_back(ElementarCharge(mouse.x, mouse.y, 0, 25*pow(10, -3)));
                         
                         insertPosCharge = false;
                     }

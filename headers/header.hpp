@@ -18,6 +18,7 @@ typedef struct Hitbox{
 }Hitbox;
 
 #define PSM 0.001 //PIXEL_SIZE_IN_METERS
+#define MASS_CTE 0.001
 
 #include "buttons.hpp"
 #include "EletricField.hpp"

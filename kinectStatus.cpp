@@ -9,8 +9,8 @@ KinectStatus::KinectStatus(){
 }
 
 KinectStatus::KinectStatus(bool random){
-    position.x = (rand() % 1000) * PSM;
-    position.y = (rand() % 600) * PSM;
+    position.x = rand() % 1000;
+    position.y = rand() % 600;
     position.z = 0;
 
     setSpeed(0,0,0);
