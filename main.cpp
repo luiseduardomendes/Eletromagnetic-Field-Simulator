@@ -10,9 +10,12 @@ int main(){
     vector<Button> &b = *buttons;
 
     int chargeSelected = -1;    
-
+    int changingPosition = -1;
     
+    /* TODO:
+     * make a function to move the charges by clicking over them
     
+    */
 
     for(int i = 0; i < 10; i ++)
         p.push_back(ElementarCharge());
@@ -20,7 +23,7 @@ int main(){
     Interface interface;
     Coord mouse;
 
-    bool particleRemaining, exit = false, reset = false, pause = false;
+    bool particleRemaining, exit = false, reset = false, pause = true;
     bool eletroMeterActived = false;
     bool insertPosCharge = false;
     bool insertNegCharge = false;
@@ -135,8 +138,15 @@ int main(){
                 al_clear_to_color(al_map_rgb(5,10,25));
                 interface.drawGrid();
                 for(int i = 0; i < p.size(); i ++)
-                    if (p[i].isPositioned())
+                    if (p[i].isPositioned() && changingPosition != i)
                         interface.drawParticle(p[i]);
+                    else if (changingPosition == i){
+                        if (p[i].eletric.charge > 0)
+                            al_draw_scaled_bitmap(interface.posCharge, 0, 0, 64, 64, mouse.x-10, mouse.y-10, 20,20, 0);
+                        else
+                            al_draw_scaled_bitmap(interface.negCharge, 0, 0, 64, 64, mouse.x-10, mouse.y-10, 20,20, 0);
+                    }
+                        
                 if(eletroMeterActived){
                     
                     al_draw_textf(font24, al_map_rgb(255,255,255), eletricFieldMousePos.position.x/PSM, eletricFieldMousePos.position.y/PSM, 0, "E = (%.3f, %.3f, %.3f) N/C", eletricFieldMousePos.vectorField.x, -eletricFieldMousePos.vectorField.y, eletricFieldMousePos.vectorField.z);
@@ -240,6 +250,33 @@ int main(){
                         eletroMeterActived = true;
                     
                 }
+                
+                else{
+                    bool found;
+                    chargeSelected = -1;
+                    for (int i = 0; i < p.size(); i ++){
+                        Coord point;
+                        point.x = p[i].kinect.position.x / PSM;
+                        point.y = p[i].kinect.position.y / PSM;
+                        if (pointInsideCircle(mouse, point, 10))
+                            chargeSelected = i;
+                    }
+                        
+                    if (chargeSelected == -1){
+                        changingPosition = -1;
+                        found = false;
+                    }
+                    else 
+                        changingPosition = chargeSelected;
+                    
+                }
+            }
+            else if(event.type == ALLEGRO_EVENT_MOUSE_BUTTON_UP){
+                if (changingPosition != -1){
+                    p[changingPosition].kinect.position.x = mouse.x * PSM;
+                    p[changingPosition].kinect.position.y = mouse.y * PSM;
+                    changingPosition = -1;
+                }
                 else{
                     if (insertNegCharge){
                         p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, -25*pow(10, -9)));
@@ -250,20 +287,6 @@ int main(){
                         p.push_back(ElementarCharge(mouse.x * PSM, mouse.y * PSM, 0, 25*pow(10, -9)));
                         
                         insertPosCharge = false;
-                    }
-                    else{
-                        bool found;
-                        chargeSelected = -1;
-                        for (int i = 0; i < p.size(); i ++){
-                            Coord point;
-                            point.x = p[i].kinect.position.x / PSM;
-                            point.y = p[i].kinect.position.y / PSM;
-                            if (pointInsideCircle(mouse, point, 10))
-                                chargeSelected = i;
-                        }
-                            
-                        if (chargeSelected == -1)
-                            found = false;
                     }
                 }
             }
