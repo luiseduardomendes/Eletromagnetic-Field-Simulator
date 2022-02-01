@@ -11,11 +11,6 @@ int main(){
 
     int chargeSelected = -1;    
     int changingPosition = -1;
-    
-    /* TODO:
-     * make a function to move the charges by clicking over them
-    
-    */
 
     for(int i = 0; i < 10; i ++)
         p.push_back(ElementarCharge());
@@ -289,6 +284,11 @@ int main(){
                         insertPosCharge = false;
                     }
                 }
+            }
+            else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+                exit = true;
+                reset = true;
+                    
             }
 
             /* TODO: create an object ElementarCharge and EletricStatus
