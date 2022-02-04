@@ -14,7 +14,7 @@ public:
 
 
 
-    ALLEGRO_BITMAP *posCharge, *negCharge, *eletromagMeter; 
+    ALLEGRO_BITMAP *posCharge, *negCharge, *eletromagMeter, *profCharge; 
     ALLEGRO_BITMAP *interface;
     int width, height;
 };

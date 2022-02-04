@@ -34,6 +34,7 @@ void Interface::initInterface(int w, int h){
     posCharge = al_load_bitmap("assets/proton.png");
     negCharge = al_load_bitmap("assets/eletron.png");
     eletromagMeter = al_load_bitmap("assets/target.png");
+    profCharge = al_load_bitmap("assets/charge.png");
 }
 
 void Interface::drawParticle(ElementarCharge e){
@@ -41,10 +42,15 @@ void Interface::drawParticle(ElementarCharge e){
     
     if(e.eletric.charge < 0)
         al_draw_scaled_bitmap(negCharge,0,0,64,64,(e.kinect.position.x)-10, (e.kinect.position.y)-10, 20, 20, 0);
-    else
+    else if (e.eletric.charge != 1*pow(10,-4))
         al_draw_scaled_bitmap(posCharge,0,0,64,64,(e.kinect.position.x)-10, (e.kinect.position.y)-10, 20, 20, 0);
+    else
+        al_draw_scaled_bitmap(profCharge,0,0,64,64,(e.kinect.position.x)-10, (e.kinect.position.y)-10, 20, 20, 0);
+
     
 }
+
+//todo calculo
 
 void Interface::drawGrid(){
     for (int i = 0; i <= width+100; i += 100)

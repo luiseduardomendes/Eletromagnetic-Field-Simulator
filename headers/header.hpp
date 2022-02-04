@@ -37,3 +37,4 @@ Coord ortogonalVector(Coord vect);
 bool isHitboxIn(Hitbox HB1, Hitbox HB2);
 bool pointInsideBox(Coord point_, Hitbox box_);
 bool pointInsideCircle(Coord point_, Coord center, double radius);
+double angleBetweenXAxis(Coord vect1);
