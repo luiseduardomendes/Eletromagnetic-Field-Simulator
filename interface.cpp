@@ -81,3 +81,46 @@ void Interface::drawButtons(vector<Button> btns, Coord mouse){
         al_draw_scaled_bitmap(btns[i].bitmap, 0, 0, 64, 64, btns[i].hitbox.infLeft.x - (growth/2), btns[i].hitbox.infLeft.y- (growth/2), 64 + growth, 64 + growth, 0);
     }
 }
+
+void Interface::drawFieldLines(vector<EletricStatus> *a, vector<ElementarCharge> *p){
+    for(int i = 0; i < a->size(); i ++){
+        Coord vect = setEletricFieldVectorinPoint(p, p->size(), (*a)[i].eletricFieldResultant.position).vectorField;
+        (*a)[i].eletricFieldResultant.setVectorField(vect.x, vect.y, 0);
+        
+        al_draw_rotated_bitmap(arrow, 5, 12.5, (*a)[i].eletricFieldResultant.position.x, (*a)[i].eletricFieldResultant.position.y, angleBetweenXAxis((*a)[i].eletricFieldResultant.vectorField) - (M_PI / 2), 0);
+    }
+}
+
+void Interface::drawCharges(Coord mouse, vector<ElementarCharge> *p){
+    for(int i = 0; i < (*p).size(); i ++)
+        if ((*p)[i].isPositioned() && !(*p)[i].isChangingPos)
+            drawParticle((*p)[i]);
+        else if ((*p)[i].isChangingPos){
+            if ((*p)[i].eletric.charge > 0)
+                al_draw_scaled_bitmap(posCharge, 0, 0, 64, 64, mouse.x-10, mouse.y-10, 20,20, 0);
+            else
+                al_draw_scaled_bitmap(negCharge, 0, 0, 64, 64, mouse.x-10, mouse.y-10, 20,20, 0);
+        }
+}
+
+void Interface::drawElectroMeter(EletricField mouse){
+
+    al_draw_textf(font24, al_map_rgb(255,255,255), mouse.position.x, 
+    mouse.position.y, 0, "E = (%.3f, %.3f, %.3f) N/C", mouse.vectorField.x, 
+    -mouse.vectorField.y, mouse.vectorField.z);
+
+    al_draw_line(mouse.position.x, mouse.position.y, 
+    (mouse.position.x + mouse.vectorField.x), 
+    (mouse.position.y + mouse.vectorField.y), al_map_rgb(140,156,172),2);
+
+    al_draw_rotated_bitmap(triangle, 4.5, 3.5, 
+    mouse.position.x + mouse.vectorField.x, 
+    mouse.position.y + mouse.vectorField.y, 
+    angleBetweenXAxis(mouse.vectorField), 0);
+}
+
+void Interface::drawbgInterface(){
+    al_draw_filled_rectangle(width/2 - 240, height - 112, width/2 + 240, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
+    al_draw_rectangle(width/2 - 240, height - 112, width/2 + 240, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
+}
+                

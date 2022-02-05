@@ -14,6 +14,7 @@ public:
     
     void setPositioned(bool status);
     bool isPositioned();
+    bool isChangingPos;
 
 private:
 
