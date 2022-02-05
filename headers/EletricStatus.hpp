@@ -5,6 +5,7 @@ class EletricStatus{
 public:
     EletricStatus();
     EletricStatus(bool random);
+    EletricStatus(int x, int y);
     
     void setCharge(double);
     

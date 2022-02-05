@@ -5,11 +5,14 @@ int main(){
     vector<ElementarCharge> &p = *molecules;
     EletricField eletricFieldMousePos;
 
+    vector<EletricStatus> *arrows = new vector<EletricStatus>;
+    vector<EletricStatus> &a = *arrows;
+
     enum {btn_insertPosCharge, btn_insertNegCharge, btn_activeEletricMeter};
     vector<Button> *buttons = new vector<Button>;
     vector<Button> &b = *buttons;
 
-    ALLEGRO_BITMAP *triangle = NULL;
+    ALLEGRO_BITMAP *triangle = NULL, *arrow = NULL;
 
     int chargeSelected = -1;    
     int changingPosition = -1;
@@ -71,9 +74,22 @@ int main(){
     al_register_event_source(eventQueue, al_get_display_event_source(display));
 
     triangle = al_create_bitmap(9,7);
+    arrow = al_create_bitmap(10,25);
     al_set_target_bitmap(triangle);
     al_draw_filled_triangle(0, 3.5, 9, 0, 9, 7, al_map_rgb(140,156,172));
+
+    al_set_target_bitmap(arrow);
+    al_draw_filled_rounded_rectangle(3,10,7,25,1,1,al_map_rgba_f(0.25,0.30, 0.35, 0.2));
+    al_draw_filled_triangle(0,11,5,0,10,11,al_map_rgba_f(0.25,0.30, 0.35, 0.2));
+
+
     al_set_target_bitmap(al_get_backbuffer(display));
+
+    for (int i = 50; i <= widht - 50; i += 50){
+        for (int j = 50; j <= height - 50; j += 50){
+            a.push_back(EletricStatus(i, j));
+        }
+    }
 
     Button btn_buffer;
     btn_buffer.bitmap = al_load_bitmap("assets/proton.png");
@@ -148,6 +164,14 @@ int main(){
 
                 al_clear_to_color(al_map_rgb(5,10,25));
                 interface.drawGrid();
+                
+                for(int i = 0; i < a.size(); i ++){
+                    Coord vect = setEletricFieldVectorinPoint(&p, p.size(), a[i].eletricFieldResultant.position).vectorField;
+                    a[i].eletricFieldResultant.setVectorField(vect.x, vect.y, 0);
+                   
+                    al_draw_rotated_bitmap(arrow, 5, 12.5, a[i].eletricFieldResultant.position.x, a[i].eletricFieldResultant.position.y, angleBetweenXAxis(a[i].eletricFieldResultant.vectorField) - (M_PI / 2), 0);
+                }
+                
                 for(int i = 0; i < p.size(); i ++)
                     if (p[i].isPositioned() && changingPosition != i)
                         interface.drawParticle(p[i]);
@@ -157,6 +181,7 @@ int main(){
                         else
                             al_draw_scaled_bitmap(interface.negCharge, 0, 0, 64, 64, mouse.x-10, mouse.y-10, 20,20, 0);
                     }
+                
                         
                 if(eletroMeterActived){
                     
@@ -195,6 +220,8 @@ int main(){
                     al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+60, 0, "Massa: %.2ekg", p[chargeSelected].kinect.mass * MASS_CTE);
                 }
                 
+                
+
                 al_flip_display();
             }
 

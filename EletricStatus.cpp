@@ -11,6 +11,10 @@ EletricStatus::EletricStatus(bool random){
         setCharge(-25 * pow(10, -4));
     eletricFieldResultant = EletricField();
 }
+EletricStatus::EletricStatus(int x, int y){
+    eletricFieldResultant.position.x = x;
+    eletricFieldResultant.position.y = y;
+}
 
 void EletricStatus::setCharge(double charge_){
     charge = charge_;
