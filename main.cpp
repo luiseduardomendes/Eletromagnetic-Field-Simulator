@@ -185,7 +185,7 @@ int main(){
                     al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+30, 0, "Posição: (%.2lf, %.2lf)m", p[chargeSelected].kinect.position.x * PSM, p[chargeSelected].kinect.position.y * PSM);
                     al_draw_textf(font24, al_map_rgb(255,255,255), widht - 250, height/2+60, 0, "Massa: %.2ekg", p[chargeSelected].kinect.mass * MASS_CTE);
                 }
-                
+                al_draw_bitmap(interface.equipotLines, 0, 0, 0);
                 
 
                 al_flip_display();
@@ -265,6 +265,7 @@ int main(){
                     if (chargeSelected == -1){
                         found = false;
                         changingPos = -1;
+                        interface.equipotentialLines(mouse, molecules, display);
                     }
                     else 
                         p[chargeSelected].isChangingPos = true;

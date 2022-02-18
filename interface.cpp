@@ -31,6 +31,7 @@ void Interface::initInterface(int w, int h){
     interface = al_create_bitmap(96*3, 96);
     width = w;
     height = h;
+    equipotLines = al_create_bitmap(w, h);
     posCharge = al_load_bitmap("assets/proton.png");
     negCharge = al_load_bitmap("assets/eletron.png");
     eletromagMeter = al_load_bitmap("assets/target.png");
@@ -122,5 +123,22 @@ void Interface::drawElectroMeter(EletricField mouse){
 void Interface::drawbgInterface(){
     al_draw_filled_rectangle(width/2 - 240, height - 112, width/2 + 240, height - 16, al_map_rgba_f(0.1,0.1,0.1, 0.1));
     al_draw_rectangle(width/2 - 240, height - 112, width/2 + 240, height - 16, al_map_rgba_f(0.4,0.4,0.4, 0.4), 5);
+}
+
+void Interface::equipotentialLines(Coord mouse, vector<ElementarCharge> *p, ALLEGRO_DISPLAY* display){
+    al_set_target_bitmap(equipotLines);
+    Coord newPos, vet;
+    newPos = mouse;
+    do {
+        al_draw_pixel(newPos.x, newPos.y, al_map_rgb(0,0,0));
+        vet = ortogonalVector(setEletricFieldVectorinPoint(p, p->size(), newPos).vectorField);
+        cout << newPos.x << " " << newPos.y << " " << mouse.x << " " << mouse.y << " ";
+        cout << vet.x << " " << vet.y << endl;
+        newPos.x += vet.x;
+        newPos.y += vet.y;
+    } while(newPos.x != mouse.x && newPos.y != mouse.y);
+
+    al_set_target_bitmap(al_get_backbuffer(display));
+        
 }
                 

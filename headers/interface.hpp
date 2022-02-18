@@ -15,8 +15,9 @@ public:
     void drawCharges(Coord mouse, std::vector<ElementarCharge> *p);
     void drawElectroMeter(EletricField mouse);
     void drawbgInterface();
+    void equipotentialLines(Coord mouse, std::vector<ElementarCharge> *p, ALLEGRO_DISPLAY* display);
 
-
+    ALLEGRO_BITMAP *equipotLines;
 
     ALLEGRO_BITMAP *posCharge, *negCharge, *eletromagMeter, *profCharge; 
     ALLEGRO_BITMAP *interface;
