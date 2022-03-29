@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+eletric_field_simulator/allegro.log
+eletric_field_simulator/eletric_field_simulator.layout
+*.log
+*.layout
